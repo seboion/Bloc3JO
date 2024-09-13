@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achats de Billets d'accès aux épreuves des JO 2024</title>
+</head>
+<body>
+    
+    <h1>Types de billets</h1>
+    <ul>
+        {% for billet in billets %}
+        <li>
+            <strong>{{ billet.nom }}</strong> - {{ billet.description }} - Prix: {{ billet.prix }}€
+
+            {% if evenement.stock_restant > 100 %} <!--SEB: En attandant de dev la page d'achat-->
+
+            <a href="{% url 'achat_billet' billet.id %}">Acheter</a>
+
+            {% else %}
+            <p>Désolé, il n'y a plus de place disponible. Soyez attentif aux éventuels désistements !</p>
+            {% endif %}
+
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}">Retour à l'accueil</a>
+
+</body>
+</html>

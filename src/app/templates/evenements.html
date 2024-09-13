@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2venements</title>
+</head>
+<body>
+    <h1>Événements disponibles</h1>
+    <ul>
+        {% for evenement in evenements %}
+        <li>
+            <strong>{{ evenement.nom }}</strong> - {{ evenement.description }}<br>
+            Date: {{ evenement.date }} - Places restantes: {{ evenement.stock_restant }}
+
+            {% if evenement.stock_restant > 10000 %} <!--SEB: En attandant de dev la page de reservation-->
+            <a href="{% url 'reserver_evenement' evenement.id %}">Réserver</a>
+            {% else %}
+                <p>Désolé, il n'y a plus de place disponible. Soyez attentif aux éventuels désistements !</p>
+            {% endif %}
+
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}">Retour à l'accueil</a>
+</body>
+</html>
