@@ -1,0 +1,7 @@
+V1 : projet Django initié : database définie, application 'app' créée et models définis
+
+V2 : Création des views dans views.py (fonctions qui traiteront les requetes et renverront les réponses appropriées) ;
+     Configuration des URLs (liasion des vues aux URLs) ;
+     Création de templates html simples pour débuter et tester ;
+     Création du super user Django ;
+     MAJ du fichier admin.py de l'app pour ajouter les models modifiables
