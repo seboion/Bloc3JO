@@ -9,6 +9,7 @@
     <h1>Créer un compte</h1>
     <form method="post" action="{% url 'inscription' %}">
         {% csrf_token %}
+        {{ form.as_p }} <!--SEB : permet d'afficher le formulaire DJango de base -->
         <label for="nom">Nom:</label>
         <input type="text" id="nom" name="nom"><br>
 
@@ -23,9 +24,6 @@
 
         <label for="telephone">Numéro de téléphone:</label>
         <input type="tel" id="telephone" name="telephone"><br>
-
-        <label for="password">Mot de passe:</label>
-        <input type="password" id="password" name="password"><br>
 
         <button type="submit">S'inscrire</button>
     </form>

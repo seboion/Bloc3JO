@@ -1,7 +1,28 @@
-V1 : projet Django initié : database définie, application 'app' créée et models définis
+V1 : Projet Django initié ;
+     Database définie ;
+     Application 'app' créée ;
+     Models définis
 
 V2 : Création des views dans views.py (fonctions qui traiteront les requetes et renverront les réponses appropriées) ;
      Configuration des URLs (liasion des vues aux URLs) ;
      Création de templates html simples pour débuter et tester ;
      Création du super user Django ;
      MAJ du fichier admin.py de l'app pour ajouter les models modifiables
+
+V3 : Ajout du readme.md ;
+     Ajout du changelog ;
+     (Divers essais git) ;
+     Ajout du fichier requirements.txt (avec pip freeze > requirements.txt)
+
+V4 : ajout de la vue reserver_evenement
+     et de ses annexes selon les cas de figure :
+          besoin de billet si pas de billet pour reserver,
+          confirmation de reservation,
+          plus de stock si l'evenement n'est plus dispo
+          reserver evenement (la page de reservation)
+     Ajout des urls login et logout dans urls.py
+
+     Ajout des vues et templates pour achater un billet, et reserver un evenement 
+     la MAJ des stocks reste à faire, la navigation sur le site semble suivre... 
+     A faire : harmoniser les fonctions de check de la connexion de l'user avec le décorateur Django?
+     Améliorer la collecte de data des users dans la bdd

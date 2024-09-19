@@ -1,0 +1,8 @@
+<h1>Réservation pour l'événement : {{ evenement.nom }}</h1>
+<p>Date : {{ evenement.date }}</p>
+<p>Description : {{ evenement.description }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmer la réservation</button>
+</form>

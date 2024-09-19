@@ -13,7 +13,8 @@
         <li>
             <strong>{{ billet.nom }}</strong> - {{ billet.description }} - Prix: {{ billet.prix }}€
 
-            {% if evenement.stock_restant > 100 %} <!--SEB: En attandant de dev la page d'achat...-->
+            
+            {% if evenement.stock_restant > 10076546540 %} <!--SEB: En attandant de dev la page d'achat...-->
 
             <a href="{% url 'achat_billet' billet.id %}">Acheter</a>
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achat de billets</title>
+</head>
+<body>
+    <h1>Achat de billets</h1>
+
+    <form method="post" action="{% url 'achat_billet' %}">
+        {% csrf_token %}
+        <label for="type_billet">Sélectionnez le type de billet :</label>
+        <select name="type_billet" id="type_billet" required>
+            {% for billet in types_billet %}
+                <option value="{{ billet.id }}">{{ billet.nom }} - {{ billet.prix }}€</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">Acheter</button>
+    </form>
+</body>
+</html>

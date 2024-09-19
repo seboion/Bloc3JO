@@ -8,8 +8,23 @@
 <body>
     <h1>Bienvenue sur le site de réservation de billets pour les Jeux Olympiques</h1>
     <p>Choisissez un type de billet et réservez vos événements préférés.</p>
+    
+    <form method="post" action="{% url 'login' %}"> <!-- Methode POST obligatoire pour se dé-loguer de façon sécuritaire (exigence de Django)-->
+        {% csrf_token %}
+        <button type="submit">Se connecter</button>
+    </form>
+
     <a href="{% url 'billets' %}">Voir les billets disponibles</a><br>
+    
     <a href="{% url 'evenements' %}">Voir les événements</a><br>
-    <a href="{% url 'inscription' %}">Créer un compte</a>
+    
+    <a href="{% url 'inscription' %}">Créer un compte</a><br>
+    
+    <a href="{% url 'profil' %}">Voir mon profil</a><br>
+
+    <form method="post" action="{% url 'logout' %}"> <!-- Methode POST obligatoire pour se dé-loguer de façon sécuritaire (exigence de Django)-->
+        {% csrf_token %}
+        <button type="submit">Se déconnecter</button>
+    </form>
 </body>
 </html>

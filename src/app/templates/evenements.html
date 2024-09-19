@@ -12,12 +12,13 @@
         <li>
             <strong>{{ evenement.nom }}</strong> - {{ evenement.description }}<br>
             Date: {{ evenement.date }} - Places restantes: {{ evenement.stock_restant }}
-
-            {% if evenement.stock_restant > 10000 %} <!--SEB: En attandant de dev la page de reservation-->
             <a href="{% url 'reserver_evenement' evenement.id %}">Réserver</a>
-            {% else %}
+            <!--SEB: En attandant de dev la page de reservation-->
+            <!-- {% if evenement.stock_restant > 10000 %}
+            <a href="{% url 'reserver_evenement' evenement.id %}">Réserver</a>
+                {% else %}
                 <p>Désolé, il n'y a plus de place disponible. Soyez attentif aux éventuels désistements !</p>
-            {% endif %}
+            {% endif %}-->
 
         </li>
         {% endfor %}

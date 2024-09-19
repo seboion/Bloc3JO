@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+</head>
+<body>
+    <h1>Profil de {{ utilisateur.username }}</h1>
+    <p>Adresse : {{ utilisateur.profile.adresse }}</p>
+    <p>Téléphone : {{ utilisateur.profile.telephone }}</p>
+    <form method="post" action="{% url 'logout' %}"> <!-- Methode POST obligatoire pour se dé-loguer de façon sécuritaire (exigence de Django)-->
+        {% csrf_token %}
+        <button type="submit">Se déconnecter</button>
+    </form>
+</body>
+</html>

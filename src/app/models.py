@@ -43,15 +43,16 @@ class Evenement(models.Model):
 
 #SEB : MODELE 3 : Billets achetés, avec génération d'une deuxième clé et du qrcode
 class Billet(models.Model):
+    utilisateur = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) #SEB : associe un billet à un user (on_delete=models.CASCADE : pour supprimer le billet si l'user est supprimé)
     type_billet = models.ForeignKey(TypeBillet, on_delete=models.CASCADE)
-    evenement = models.ForeignKey(Evenement, on_delete=models.CASCADE)
+    #evenement = models.ForeignKey(Evenement, on_delete=models.CASCADE,null=True, blank=True)
     date_achat = models.DateTimeField(auto_now_add=True)  #SEB : Date d'achat générée automatiquement
     qr_code = models.CharField(max_length=255, unique=True)
     est_valide = models.BooleanField(default=True)
-    security_key_billet = models.UUIDField(default=uuid.uuid4, unique=True)  # Clé dédiée au billet
+    security_key_billet = models.UUIDField(default=uuid.uuid4, unique=True)  # SEB : Clé dédiée au billet
 
     def __str__(self):
-        return f'{self.type_billet.nom} - {self.evenement.nom}'
+        return f'{self.type_billet.nom}'
 
 
 #SEB : MODELE 4 : Réservation, rendu possible avec un billet et si l'évènement en question est toujours dispo (vérif à faire)
@@ -60,7 +61,7 @@ class Reservation(models.Model):
     billet = models.ForeignKey(Billet, on_delete=models.CASCADE)
     evenement = models.ForeignKey(Evenement, on_delete=models.CASCADE)
     date_reservation = models.DateTimeField(auto_now_add=True)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
+    #total = models.DecimalField(max_digits=10, decimal_places=2) **************************************************************************
 
     def __str__(self):
         return f'Reservation pour {self.evenement.nom} - Billet ID: {self.billet.id}'
