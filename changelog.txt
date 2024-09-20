@@ -26,3 +26,17 @@ V4 : ajout de la vue reserver_evenement
      la MAJ des stocks reste à faire, la navigation sur le site semble suivre... 
      A faire : harmoniser les fonctions de check de la connexion de l'user avec le décorateur Django?
      Améliorer la collecte de data des users dans la bdd
+
+V5 : implémentation de la gestion des stocks :
+     nombre de billet dispo par utilisateur
+     nombre de billet MAJ après reservation et stock evenement MAJ après reservation
+     vérification du nb de billet dispo OK verification du stock evenement OK
+     clarification des modèles (suppression de redondance, ajout de champs)
+     MAJ type de billet pour définir la quantité de billet individuels correspondant
+
+     A faire : gestion utilisateur : voir et annuler ses reservations (avec rendu d'un Billet)
+               Editer son profil pour changer adresse numero de tel etc
+               Choisir aussi le nombre de billet acheté (panier ?)
+               Résumé de la commande avant achat 
+               Confirmation par mail/sms
+               

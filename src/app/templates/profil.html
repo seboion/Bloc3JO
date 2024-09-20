@@ -7,11 +7,19 @@
 </head>
 <body>
     <h1>Profil de {{ utilisateur.username }}</h1>
-    <p>Adresse : {{ utilisateur.profile.adresse }}</p>
-    <p>Téléphone : {{ utilisateur.profile.telephone }}</p>
+
+    <p>Nom : {{ utilisateur.first_name }} {{ utilisateur.last_name }}</p>
+    <p>Email : {{ utilisateur.email }}</p>
+    <p>Adresse : {{ profil.adresse }}</p>
+    <p>Téléphone : {{ profil.telephone }}</p>
+
+    <h2>Billets disponibles</h2>
+    <p>Vous avez {{ quantite_totale_billets }} billets disponibles.</p>
+    
     <form method="post" action="{% url 'logout' %}"> <!-- Methode POST obligatoire pour se dé-loguer de façon sécuritaire (exigence de Django)-->
         {% csrf_token %}
         <button type="submit">Se déconnecter</button>
     </form>
+    <a href="{% url 'home' %}">Retour à l'accueil</a>
 </body>
 </html>

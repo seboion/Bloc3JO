@@ -12,16 +12,8 @@
         {% for billet in billets %}
         <li>
             <strong>{{ billet.nom }}</strong> - {{ billet.description }} - Prix: {{ billet.prix }}€
-
+            <a href="{% url 'achat_billet' %}">Acheter</a>
             
-            {% if evenement.stock_restant > 10076546540 %} <!--SEB: En attandant de dev la page d'achat...-->
-
-            <a href="{% url 'achat_billet' billet.id %}">Acheter</a>
-
-            {% else %}
-            <p>Désolé, il n'y a plus de place disponible. Soyez attentif aux éventuels désistements !</p>
-            {% endif %}
-
         </li>
         {% endfor %}
     </ul>

@@ -13,7 +13,6 @@ class Profile(models.Model):
     telephone = models.CharField(max_length=20)
     security_key = models.UUIDField(default=uuid.uuid4, unique=True) #SEB : clé de sécurité
 
-
     def __str__(self):
         return f'{self.user.username} - Profile'
 
@@ -21,7 +20,8 @@ class Profile(models.Model):
 #SEB : MODELE 1 : Type de billet : Il s'agira des billets demandés : SOLO, DUO ou FAMILLE
 class TypeBillet(models.Model):
     nom = models.CharField(max_length=20) #SEB: SOLO, DUO, FAMILLE
-    description = models.TextField() 
+    description = models.TextField()
+    quantité_billet = models.IntegerField(default=1) #SEB : 1 , 2, ou 4
     prix = models.DecimalField(max_digits=5, decimal_places=2) #SEB: en supossant un prix max de 999,99€ max_digits réglé sur 5
 
     def __str__(self):
@@ -45,7 +45,6 @@ class Evenement(models.Model):
 class Billet(models.Model):
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) #SEB : associe un billet à un user (on_delete=models.CASCADE : pour supprimer le billet si l'user est supprimé)
     type_billet = models.ForeignKey(TypeBillet, on_delete=models.CASCADE)
-    #evenement = models.ForeignKey(Evenement, on_delete=models.CASCADE,null=True, blank=True)
     date_achat = models.DateTimeField(auto_now_add=True)  #SEB : Date d'achat générée automatiquement
     qr_code = models.CharField(max_length=255, unique=True)
     est_valide = models.BooleanField(default=True)
