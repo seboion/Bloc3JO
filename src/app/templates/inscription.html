@@ -9,22 +9,8 @@
     <h1>Créer un compte</h1>
     <form method="post" action="{% url 'inscription' %}">
         {% csrf_token %}
-        {{ form.as_p }} <!--SEB : permet d'afficher le formulaire DJango de base -->
-        <label for="nom">Nom:</label>
-        <input type="text" id="nom" name="nom"><br>
-
-        <label for="prenom">Prénom:</label>
-        <input type="text" id="prenom" name="prenom"><br>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email"><br>
-
-        <label for="adresse">Adresse:</label>
-        <input type="text" id="adresse" name="adresse"><br>
-
-        <label for="telephone">Numéro de téléphone:</label>
-        <input type="tel" id="telephone" name="telephone"><br>
-
+        {{ form.as_p }} <!--SEB : permet d'afficher le formulaire DJango de base qui a été étendu grâce au fichier ajouté "forms.py dans l'app" -->
+        
         <button type="submit">S'inscrire</button>
     </form>
     <a href="{% url 'home' %}">Retour à l'accueil</a>

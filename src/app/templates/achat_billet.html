@@ -3,22 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Achat de billets</title>
+    <title>Achat de billets pour les Jeux Olympiques de Paris</title>
+
+    <script>
+        // SEB : MAJ du total à payer
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('.quantity').forEach(function(input) {
+                const price = parseFloat(input.dataset.price);
+                const quantity = parseInt(input.value) || 0;
+                total += price * quantity;
+            });
+            document.getElementById('totalPrice').innerText = total.toFixed(2) + ' €';
+        }
+
+        // SEB : ajuste la quantité en utilisant les boutons + et -
+        function adjustQuantity(id, delta) {
+            const input = document.getElementById('quantity-' + id);
+            let newValue = (parseInt(input.value) || 0) + delta;
+            if (newValue < 0) newValue = 0;
+            input.value = newValue;
+            updateTotal();
+        }
+    </script>
 </head>
 <body>
-    <h1>Achat de billets</h1>
+    <h1>Bienvenue sur la plateforme d'achat de billets pour les Jeux Olympiques de Paris 2024</h1>
+    <p>Chaque billet vous permettra de réserver une place à l'un des événements de votre choix (sous réserve de disponibilité).</p>
+    <p>Ces billets sont non remboursables et non échangeables. Lors de l'accès à l'événement, en cas de contrôle des réservations, votre identité pourra être vérifiée. Si vous achetez des billets pour d'autres personnes, la présentation de votre pièce d'identité pourra être demandée. Pensez-y !</p>
 
     <form method="post" action="{% url 'achat_billet' %}">
         {% csrf_token %}
-        <label for="type_billet">Sélectionnez le type de billet :</label>
-        <select name="type_billet" id="type_billet" required>
-            {% for billet in types_billet %}
-                <option value="{{ billet.id }}">{{ billet.nom }} - {{ billet.prix }}€</option>
-            {% endfor %}
-        </select>
+
+        {% for billet in types_billet %}
+        <div>
+            <label for="quantity-{{ billet.id }}">{{ billet.nom }} - {{ billet.prix }}€</label>
+            <button type="button" onclick="adjustQuantity({{ billet.id }}, -1)">-</button>
+            <input type="number" name="quantities[{{ billet.id }}]" id="quantity-{{ billet.id }}" class="quantity" data-price="{{ billet.prix }}" value="0" min="0" onchange="updateTotal()">
+            <button type="button" onclick="adjustQuantity({{ billet.id }}, 1)">+</button>
+        </div>
+        {% endfor %}
+
+        <div>
+            Total à payer : <span id="totalPrice">0.00 €</span>
+        </div>
         <br><br>
+        {% if messages %}
+        {% for message in messages %}
+            <div>{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        
         <button type="submit">Acheter</button>
     </form>
+
     <a href="{% url 'home' %}">Retour à l'accueil</a>
 </body>
 </html>

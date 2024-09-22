@@ -8,7 +8,7 @@ import uuid #SEB : Pour la génération de clés
 
 #SEB : MODELE 0 : Profiles des utilisateurs : ajout de clé au modèle utilisateur de Django (il s'agit ici d'un modèle étendu)
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE) #SEB: Utilisation du User de Django
+    user = models.OneToOneField(User, on_delete=models.CASCADE) #SEB: Utilisation du User de Django il contient déjà first name last name et email
     adresse = models.CharField(max_length=255) #SEB : Ajout d'autres champs non prévu dans User de Django
     telephone = models.CharField(max_length=20)
     security_key = models.UUIDField(default=uuid.uuid4, unique=True) #SEB : clé de sécurité
@@ -33,9 +33,15 @@ class Evenement(models.Model):
     nom = models.CharField(max_length=100)
     date = models.DateTimeField()
     stock_initial = models.IntegerField()
-    stock_restant = models.IntegerField()
+    stock_restant = models.IntegerField(blank=True, null=True)
     description = models.TextField()
     photo = models.ImageField(upload_to='evenements/', blank=True, null=True)
+    a_la_une = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.stock_restant is None:  # Vérifiez si stock_restant est nul
+            self.stock_restant = self.stock_initial  # Initialisez-le avec stock_initial
+        super().save(*args, **kwargs)  # Appelez la méthode save de la classe parente
 
     def __str__(self):
         return self.nom
@@ -46,7 +52,6 @@ class Billet(models.Model):
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) #SEB : associe un billet à un user (on_delete=models.CASCADE : pour supprimer le billet si l'user est supprimé)
     type_billet = models.ForeignKey(TypeBillet, on_delete=models.CASCADE)
     date_achat = models.DateTimeField(auto_now_add=True)  #SEB : Date d'achat générée automatiquement
-    qr_code = models.CharField(max_length=255, unique=True)
     est_valide = models.BooleanField(default=True)
     security_key_billet = models.UUIDField(default=uuid.uuid4, unique=True)  # SEB : Clé dédiée au billet
 
@@ -60,7 +65,7 @@ class Reservation(models.Model):
     billet = models.ForeignKey(Billet, on_delete=models.CASCADE)
     evenement = models.ForeignKey(Evenement, on_delete=models.CASCADE)
     date_reservation = models.DateTimeField(auto_now_add=True)
-    #total = models.DecimalField(max_digits=10, decimal_places=2) **************************************************************************
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def __str__(self):
         return f'Reservation pour {self.evenement.nom} - Billet ID: {self.billet.id}'

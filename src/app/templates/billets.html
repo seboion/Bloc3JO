@@ -4,15 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Achats de Billets d'accès aux épreuves des JO 2024</title>
+
 </head>
 <body>
     
     <h1>Types de billets</h1>
+    {% if not user.is_authenticated %}
+    <p>Connectez-vous ou creez un compte pour acheter des billets</p>
+    {% endif %}
     <ul>
         {% for billet in billets %}
         <li>
             <strong>{{ billet.nom }}</strong> - {{ billet.description }} - Prix: {{ billet.prix }}€
+            
+            {% if user.is_authenticated %}
             <a href="{% url 'achat_billet' %}">Acheter</a>
+            {% endif %}
             
         </li>
         {% endfor %}

@@ -1,3 +1,4 @@
+<!-- profil.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,17 +7,44 @@
     <title>Profil</title>
 </head>
 <body>
-    <h1>Profil de {{ utilisateur.username }}</h1>
+    <h1>Votre compte ({{ utilisateur.username }})</h1>
 
-    <p>Nom : {{ utilisateur.first_name }} {{ utilisateur.last_name }}</p>
-    <p>Email : {{ utilisateur.email }}</p>
-    <p>Adresse : {{ profil.adresse }}</p>
-    <p>Téléphone : {{ profil.telephone }}</p>
+    <form method="post">
+        {% csrf_token %} <!--SEB: pour sécuriser la transmission des données-->
+        <fieldset>
+            <legend>Informations personnelles</legend>
+            {{ user_form.as_p }}
+            {{ profile_form.as_p }}
+        </fieldset>
+        <button type="submit">Mettre à jour</button>
+    </form>
 
     <h2>Billets disponibles</h2>
     <p>Vous avez {{ quantite_totale_billets }} billets disponibles.</p>
+
+    <h2>Mes Réservations</h2>
+    <ul>
+    {% for reservation in reservations %}
+        <li>
+            Événement: {{ reservation.evenement.nom }} - Date: {{ reservation.evenement.date }} - Billet: {{ reservation.billet.type_billet.nom }} - Date de réservation: {{ reservation.date_reservation }}
+            <form action="{% url 'annuler_reservation' reservation.token %}" method="get">
+                
+                <button type="submit">Annuler la réservation</button>
+            </form>
+            <a href="{% url 'ticket_view' reservation.token %}">Afficher le ticket</a>
+        </li>
+    {% empty %}
+        <li>Aucune réservation trouvée.</li>
+    {% endfor %}
+    </ul>
     
-    <form method="post" action="{% url 'logout' %}"> <!-- Methode POST obligatoire pour se dé-loguer de façon sécuritaire (exigence de Django)-->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'logout' %}"> 
         {% csrf_token %}
         <button type="submit">Se déconnecter</button>
     </form>

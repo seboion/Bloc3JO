@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+</head>
+<body>
+    <h1>Se connecter</h1>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div>
+            <label for="id_username">Nom d'utilisateur :</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <p class="error">{{ form.username.errors }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_password">Mot de passe :</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+                <p class="error">{{ form.password.errors }}</p>
+            {% endif %}
+        </div>
+        <button type="submit">Connexion</button>
+    </form>
+    <a href="{% url 'home' %}">Retour à l'accueil</a>
+</body>
+</html>

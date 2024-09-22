@@ -6,25 +6,73 @@
     <title>Accueil</title>
 </head>
 <body>
-    <h1>Bienvenue sur le site de réservation de billets pour les Jeux Olympiques</h1>
-    <p>Choisissez un type de billet et réservez vos événements préférés.</p>
-    
-    <form method="post" action="{% url 'login' %}"> <!-- Methode POST obligatoire pour se dé-loguer de façon sécuritaire (exigence de Django)-->
-        {% csrf_token %}
-        <button type="submit">Se connecter</button>
-    </form>
+    <header>
+        {% if utilisateur %}
+        <h1>Bonjour {{ utilisateur.username }}, bienvenue sur le site de réservation de billets pour les Jeux Olympiques</h1>
+        {% else %}
+        <h1>Bienvenue sur le site de réservation de billets pour les Jeux Olympiques</h1>
+        {% endif %}
+        <nav>
+            <ul>
+                
+                {% if user.is_authenticated %}
+                <!-- SEB: Visible que pour les users connectés -->  
+                <li><a href="{% url 'profil' %}">Mon compte</a></li>
 
-    <a href="{% url 'billets' %}">Voir les billets disponibles</a><br>
-    
-    <a href="{% url 'evenements' %}">Voir les événements</a><br>
-    
-    <a href="{% url 'inscription' %}">Créer un compte</a><br>
-    
-    <a href="{% url 'profil' %}">Voir mon profil</a><br>
+                {% else %}
+                <!-- SEB: Visible que pour les visiteurs non connectés -->  
+                    <li> <form method="post" action="{% url 'login' %}"> <!-- Methode POST obligatoire pour se dé-loguer de façon sécuritaire (exigence de Django)-->
+                        {% csrf_token %}
+                        <button type="submit">Se connecter</button>
+                        </form>
+                    </li>
 
-    <form method="post" action="{% url 'logout' %}"> <!-- Methode POST obligatoire pour se dé-loguer de façon sécuritaire (exigence de Django)-->
-        {% csrf_token %}
-        <button type="submit">Se déconnecter</button>
-    </form>
+                    <li><a href="{% url 'inscription' %}">Créer un compte</a></li>
+
+               {% endif %}
+               <!-- SEB : Lien toujours visibles -->        
+                    <li><a href="{% url 'billets' %}">Consulter les offres de billets pour les JO de Paris 2024</a></li>
+                    <li><a href="{% url 'evenements' %}">Voir tous événements des JO de Paris 2024</a></li>
+                
+                {% if user.is_authenticated %}
+                <!-- SEB: Visible que pour les users connectés --> 
+                
+                <li>
+                    <form method="post" action="{% url 'logout' %}"> <!-- Methode POST obligatoire pour se dé-loguer de façon sécuritaire (exigence de Django)-->
+                        {% csrf_token %}
+                        <button type="submit">Se déconnecter</button>
+                    </form>
+                </li>
+
+                {% endif %}
+
+        </nav>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Les prochains évènements clés des Jeux Olympiques de Paris 2024</h2>
+
+            <ul>
+                {% for evenement in evenements_une %}
+                <li>
+                    <strong>{{ evenement.nom }}</strong> - {{ evenement.description }}<br>
+                    Date: {{ evenement.date }} - Nombre de place encore disponible : {{ evenement.stock_restant }}
+        
+        
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Site officieux des Jeux Olympiques de Paris 2024 - Examen de Bloc 3 Studi</p>
+    </footer>
+
+
+
 </body>
 </html>

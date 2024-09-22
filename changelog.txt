@@ -34,9 +34,21 @@ V5 : implémentation de la gestion des stocks :
      clarification des modèles (suppression de redondance, ajout de champs)
      MAJ type de billet pour définir la quantité de billet individuels correspondant
 
-     A faire : gestion utilisateur : voir et annuler ses reservations (avec rendu d'un Billet)
-               Editer son profil pour changer adresse numero de tel etc
-               Choisir aussi le nombre de billet acheté (panier ?)
+V6 : création d'un fichier forms.py pour étendre le formulaire de requetes de données pour l'inscription d'un nouvel utilisateur
+     amélioration de l'organisation des templates html (ordre, affichage de certains lien en fonction de si l'utilisateur est connecté ou non)
+     amélioration de l'affichage profil
+     amélioration de l'affichage de home
+     ajout de la possibilité d'annuler une reservation
+     Affichage des évènement sur la page d'accueil avec ajout du booleen a_la_une pour que l'admin puisse choisir ce qui passe sur la page d'accueil
+     Ajout de l'affichage des photos liés au events
+     Ajout de la vue des tickets avec le qrcode
+     Ajout de la selection du nombre de billets à acheter
+     Editer son profil pour changer adresse numero de tel etc
+
+
+A faire : 
                Résumé de la commande avant achat 
                Confirmation par mail/sms
-               
+               faire les tests unitaires
+               le front end
+               le mock achat

@@ -1,9 +1,13 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views #SEB : pour utiliser les login et logout de Django
-from . import views #SEB : import de tout views
+from . import views #SEB : import de toutes les views
+from .views import CustomLoginView, annuler_reservation_view, ticket_view
+#SEB : pour utiliser les fichiers media :
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [ #SEB : liaisons de chaques vues aux urls
-    path('login/', auth_views.LoginView.as_view(), name='login'), #SEB : login et logout de Django
+    path('login/', CustomLoginView.as_view(), name='login'), #SEB : login et logout de Django
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('billets/', views.billets_view, name='billets'), 
     path('evenements/', views.evenements_view, name='evenements'),
@@ -16,4 +20,7 @@ urlpatterns = [ #SEB : liaisons de chaques vues aux urls
     path('profil/', views.profil_view, name='profil'),
     path('achat_billet/', views.achat_billet_view, name='achat_billet'),
     path('confirmation-achat/', views.confirmation_achat_view, name='confirmation_achat'),
-]
+    path('annuler_reservation/<uuid:token>/', annuler_reservation_view, name='annuler_reservation'),
+    path('ticket/<uuid:token>/', ticket_view, name='ticket_view'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #SEB : pour la gestion des images
+

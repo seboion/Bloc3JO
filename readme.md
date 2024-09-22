@@ -35,3 +35,7 @@ Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de reservat
     puis ouvrir le liens local ainsi générer (CTRL+C pour fermer le serveur local)
 
 5.  Une fois sur le site internet, se rendre sur /admin du site pour accéder à l'interface administrateur
+
+6.  Commencer par créer les types d'offres (Solo, Duo, Famille) et des évènements pour les réservations
+
+

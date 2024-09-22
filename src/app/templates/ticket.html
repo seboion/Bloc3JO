@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Ticket</title>
+</head>
+<body>
+    <h1>Votre Réservation</h1>
+    <p>Événement : {{ reservation.evenement.nom }}</p>
+    <p>Date : {{ reservation.evenement.date }}</p>
+    <p>Billet : {{ reservation.billet.security_key_billet }}</p>
+
+    <h2>QR Code</h2>
+    <img src="{{ qr_img_path }}" alt="QR Code" style="width: 150px; height: 150px;">
+
+    <p>Merci pour votre réservation !</p>
+    <a href="{% url 'profil' %}">Retour à mon profil</a>
+</body>
+</html>
