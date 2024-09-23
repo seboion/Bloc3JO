@@ -26,12 +26,19 @@
     <ul>
     {% for reservation in reservations %}
         <li>
-            Événement: {{ reservation.evenement.nom }} - Date: {{ reservation.evenement.date }} - Billet: {{ reservation.billet.type_billet.nom }} - Date de réservation: {{ reservation.date_reservation }}
-            <form action="{% url 'annuler_reservation' reservation.token %}" method="get">
-                
-                <button type="submit">Annuler la réservation</button>
-            </form>
+            Date de réservation : {{ reservation.date_reservation }}<br>
+            Événement : {{ reservation.evenement.nom }}<br>
+            Date de l'évènement : {{ reservation.evenement.date }}
+            <!--Vérifie si l'annulation est toujours possible-->
+            {% if not reservation.annulation_possible %}
+                <p>L'annulation de cette réservation n'est plus possible.</p>
+            {% else %}
+                <form action="{% url 'annuler_reservation' reservation.token %}" method="get">
+                    <button type="submit">Annuler la réservation</button>
+                </form>
+            {% endif %}
             <a href="{% url 'ticket_view' reservation.token %}">Afficher le ticket</a>
+            <p></p>
         </li>
     {% empty %}
         <li>Aucune réservation trouvée.</li>

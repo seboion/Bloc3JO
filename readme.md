@@ -36,6 +36,11 @@ Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de reservat
 
 5.  Une fois sur le site internet, se rendre sur /admin du site pour accéder à l'interface administrateur
 
-6.  Commencer par créer les types d'offres (Solo, Duo, Famille) et des évènements pour les réservations
+6.  Commencer par créer les types d'offres (Solo, Duo, Famille) et des évènements pour les réservations (un fichier testImageEvent.jpg peut être utilisé il est situé dans le dossier src/media/Tests)
+
+7.  Lors de la création d'évènements, cocher la case "A la une" pour que l'évènement fasse partie des évènements affichés sur la page d'accueil.
+    Seuls les évènements dont la date est supérieure ou égale à la date du jour ET dont la case "A la une" aura été coché s'afficheront sur la page d'accueil.
+
+8.  La reservation et l'annulation des évènements n'est rendu possible que jusqu'à J-2 de la date de l'évènement concernée
 
 

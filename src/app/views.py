@@ -41,9 +41,10 @@ def billets_view(request): #SEB : présentation des offres d'achats de billets
 
 def evenements_view(request): #SEB : présentation des évèvements
     evenements = Evenement.objects.all()  #SEB : récupères tous les événements
-    date_limite = date.today() + timedelta(days=1) #SEB : défini la date limite de la reservation (on ne veut plus de reservation la veille pour le lendemain)
+    
     for evenement in evenements:
-        evenement.reservation_possible = evenement.date.date() > date_limite
+
+        evenement.reservation_possible = date.today() < evenement.date_limite_reservation.date()
     
     return render(request, 'evenements.html', {'evenements': evenements})
 
@@ -81,6 +82,10 @@ def profil_view(request): #SEB : page d'affichage du profil de l'utilisateur
     nombre_billets = Billet.objects.filter(utilisateur=utilisateur, est_valide=True).count()
     reservations = Reservation.objects.filter(utilisateur=utilisateur)
 
+    for reservation in reservations:
+        reservation.annulation_possible = date.today() < reservation.evenement.date_limite_reservation.date()
+
+
     return render(request, 'profil.html', {
         'utilisateur': utilisateur,
         'profil': profil,
@@ -100,6 +105,7 @@ def achat_billet_view(request): #SEB : Plateforme d'achat des billets
         # SEB : Initialise les variables et les montants
         montant_total = 0 #SEB : prix
         nombre_billet = 0 #SEB : pour la conversion des offres achetés en bon nombre de ticket individuels
+        panier = []
 
         # Parcourir les types de billets pour créer les billets en fonction des quantités choisies
         for billet in types_billet:
@@ -204,9 +210,13 @@ def ticket_view(request, token):
 
     if reservation.utilisateur != request.user:
         return HttpResponseForbidden("Vous n'êtes pas autorisé à accéder à cette page.")
+    
+    # Récupéreration des clé de sécurité
+    security_key_user = reservation.utilisateur.profile.security_key
+    security_key_billet = reservation.billet.security_key_billet
 
-    # Générer le QR code
-    qr_data = f"{reservation.id}-{reservation.evenement.nom}-{reservation.billet.security_key_billet}"
+    # Généreration du QR code (concaténation du user security key et du security key du billet)
+    qr_data = f"{security_key_user}-{security_key_billet}"
     qr_img = qrcode.make(qr_data)
 
     # Enregistrer l'image QR code dans un fichier ou utiliser une réponse HttpResponse SEB : avoir créé le dossier scr/media/tickets

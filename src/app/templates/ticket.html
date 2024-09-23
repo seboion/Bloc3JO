@@ -6,15 +6,17 @@
     <title>Votre Ticket</title>
 </head>
 <body>
-    <h1>Votre Réservation</h1>
-    <p>Événement : {{ reservation.evenement.nom }}</p>
+    <h1>Tickets de réservation Jeux Olympiques de Paris 2024</h1>
+    
+    <p>Évènement : {{ reservation.evenement.nom }}</p>
     <p>Date : {{ reservation.evenement.date }}</p>
-    <p>Billet : {{ reservation.billet.security_key_billet }}</p>
+    <p>N° du Ticket : {{reservation.utilisateur.profile.security_key}}-{{reservation.billet.security_key_billet}}</p>
 
-    <h2>QR Code</h2>
-    <img src="{{ qr_img_path }}" alt="QR Code" style="width: 150px; height: 150px;">
+    <h2>QR Code à présenter aux bornes</h2>
+    <img src="{{ qr_img_path }}" alt="QR Code" style="width: 300px; height: 300px;">
 
     <p>Merci pour votre réservation !</p>
+    <p>Nous vous rappelons que ce ticket est personnel. Une présentation de l'identité de la personne ayant réalisé l'achat pourra vous être demandée.</p>
     <a href="{% url 'profil' %}">Retour à mon profil</a>
 </body>
 </html>

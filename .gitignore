@@ -1,3 +1,6 @@
 env/
 **/__pycache__/
 src/app/migrations/
+src/media/evenements/
+src/media/tickets/
+src/app/__pycache__/

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User #SEB: Pour laisser à Django l'utilisation sécurisé des Users
 import uuid #SEB : Pour la génération de clés
+from datetime import timedelta
 
 # Create your models here.
 #SEB: les 5 modèles décrits ici servent à communiquer avec la BDD
@@ -37,11 +38,14 @@ class Evenement(models.Model):
     description = models.TextField()
     photo = models.ImageField(upload_to='evenements/', blank=True, null=True)
     a_la_une = models.BooleanField(default=False)
+    date_limite_reservation = models.DateTimeField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if self.stock_restant is None:  # Vérifiez si stock_restant est nul
-            self.stock_restant = self.stock_initial  # Initialisez-le avec stock_initial
-        super().save(*args, **kwargs)  # Appelez la méthode save de la classe parente
+        if self.stock_restant is None:  # Vérifie si stock_restant est nul
+            self.stock_restant = self.stock_initial  # Initialise avec stock_initial
+        if self.date_limite_reservation is None:
+            self.date_limite_reservation = self.date - timedelta(days=1)
+        super().save(*args, **kwargs)  # Appele la méthode save de la classe parente
 
     def __str__(self):
         return self.nom

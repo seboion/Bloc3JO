@@ -45,10 +45,19 @@ V6 : création d'un fichier forms.py pour étendre le formulaire de requetes de 
      Ajout de la selection du nombre de billets à acheter
      Editer son profil pour changer adresse numero de tel etc
 
+V7 : Ajout du MDC au Projet
+     Ajout de la doc technique
+     Modification du git ignore
+     Amélioration de l'impossibilté de reserver ou annuler une reservation quand trop proche de la date de l'evenement (ajout d'une date limite dans le model)
+     Amélioration de l'affichage du ticket de reservation
+     Concatenation du QR code comme attendu par le client
+     Ajout d'une image de test pour faciliter la création des évènements fictifs
+
+
 
 A faire : 
                Résumé de la commande avant achat 
-               Confirmation par mail/sms
+               le mock achat
                faire les tests unitaires
                le front end
-               le mock achat
+
