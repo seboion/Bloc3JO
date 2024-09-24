@@ -13,10 +13,27 @@
     <p>N° du Ticket : {{reservation.utilisateur.profile.security_key}}-{{reservation.billet.security_key_billet}}</p>
 
     <h2>QR Code à présenter aux bornes</h2>
-    <img src="{{ qr_img_path }}" alt="QR Code" style="width: 300px; height: 300px;">
+
+    <div id="qrcode" style="width: 300px; height: 300px;"></div>
 
     <p>Merci pour votre réservation !</p>
     <p>Nous vous rappelons que ce ticket est personnel. Une présentation de l'identité de la personne ayant réalisé l'achat pourra vous être demandée.</p>
     <a href="{% url 'profil' %}">Retour à mon profil</a>
+
+
+<!-- QRCode.js pour générer le QR Code coté utilisateur -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> 
+<script>
+    // Contenu du QR code
+    var qrContent = "{{ reservation.utilisateur.profile.security_key }}-{{ reservation.billet.security_key_billet }}";
+
+    // Généreration du QR code
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: qrContent,
+        width: 300,
+        height: 300
+    });
+</script>
+
 </body>
 </html>

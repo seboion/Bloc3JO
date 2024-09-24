@@ -1,7 +1,6 @@
 import uuid #SEB : pour la génération des clés et token
-import qrcode
 from .models import TypeBillet, Evenement, Reservation, Billet, User, Profile #SEB : imports des models
-from .forms import CustomUserCreationForm, UpdateUserForm, UpdateProfileForm, CustomAuthenticationForm #SEB : import des class de .forms pour l'extension des données perso + les modifications des informations
+from .forms import CustomUserCreationForm, UpdateUserForm, UpdateProfileForm, CustomAuthenticationForm, CustomPasswordChangeForm #SEB : import des class de .forms pour l'extension des données perso + les modifications des informations
 from django.shortcuts import redirect, render, get_object_or_404 #SEB : get_object_or_404 permettra de lever une erreur 404 si un objet n'est pas trouvé ; redirect pour rediriger les utilisiateurs de vue en vues
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required #SEB : pour utiliser le décorateur @login_required
@@ -16,6 +15,10 @@ from django.http import HttpResponse, HttpResponseForbidden
 import os
 from django.conf import settings
 from django.http import HttpResponseForbidden
+from django.contrib.auth import update_session_auth_hash #pour ne pas déconnecter l'user après changement de mot de passe
+#SEB : pour la personnalisation de la vue de changement de mot de passe :
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -26,8 +29,13 @@ class CustomLoginView(LoginView): #SEB : pour personnaliser la vue login de Djan
     def form_invalid(self, form):
         # SEB : pour personaliser le message d'erreur
         for field in form.errors:
-            form[field].field.widget.attrs['class'] = 'is-invalid'
+            if field != '__all__':
+                form[field].field.widget.attrs['class'] = 'is-invalid'
         return super().form_invalid(form)
+
+class CustomPasswordChangeView(PasswordChangeView): #SEB : pour personnaliser la vue de changement de mot de passe
+    template_name = 'registration/password_change.html'  #template pour le changement de mot de passe
+    success_url = reverse_lazy('password_change_done')  # redirige vers la page de confirmation
 
 def home_view(request): #SEB : page d'accueil
     utilisateur = request.user if request.user.is_authenticated else None
@@ -61,22 +69,36 @@ def inscription_view(request): #SEB : page de création de compte utilisateur
 
 @login_required
 def profil_view(request): #SEB : page d'affichage du profil de l'utilisateur
-    utilisateur = request.user  #SEB : Utilisateur connecté
+    utilisateur = request.user #SEB : Utilisateur connecté
     profil = Profile.objects.get(user=utilisateur) #SEB : Récupère le profil de l'utilisateur
 
-    #SEB : MAJ des info personnelles :
-    if request.method == 'POST':
+    #SEB : Initialise les formulaires
+    user_form = UpdateUserForm(instance=utilisateur)
+    profile_form = UpdateProfileForm(instance=profil)
+    password_change_form = CustomPasswordChangeForm(request.user)
+
+    # Gérer la mise à jour des informations de l'utilisateur que si 'update_info' a été POST
+    if 'update_info' in request.POST:
         user_form = UpdateUserForm(request.POST, instance=utilisateur)
         profile_form = UpdateProfileForm(request.POST, instance=profil)
+        
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return redirect('profil')
+            messages.success(request, "Vos informations personnelles ont été mises à jour avec succès.")
+        else:
+            messages.error(request, "Il y a des erreurs dans les informations fournies.")
 
-    else:
-        user_form = UpdateUserForm(instance=utilisateur)
-        profile_form = UpdateProfileForm(instance=profil)
-
+    # Gérer le changement de mot de passe
+    elif 'change_password' in request.POST:
+        password_change_form = CustomPasswordChangeForm(request.user, request.POST)
+        
+        if password_change_form.is_valid():
+            user = password_change_form.save()
+            update_session_auth_hash(request, user)  # Pour éviter de déconnecter l'utilisateur
+            messages.success(request, "Votre mot de passe a été mis à jour avec succès.")
+        else:
+            messages.error(request, "Il y a eu une erreur dans la saisie du mot de passe. Veuillez vérifier les informations et réessayer.")
 
     # Compter le nombre de billets associés à l'utilisateur
     nombre_billets = Billet.objects.filter(utilisateur=utilisateur, est_valide=True).count()
@@ -85,15 +107,18 @@ def profil_view(request): #SEB : page d'affichage du profil de l'utilisateur
     for reservation in reservations:
         reservation.annulation_possible = date.today() < reservation.evenement.date_limite_reservation.date()
 
-
     return render(request, 'profil.html', {
         'utilisateur': utilisateur,
         'profil': profil,
         'user_form': user_form,
         'profile_form': profile_form,
+        'password_change_form': password_change_form,
         'quantite_totale_billets': nombre_billets,
         'reservations': reservations,
     })
+
+def password_change_done_view(request):
+    return render(request, 'password_change_done.html')
 
 @login_required #SEB : pour que la page ne soit pas accessible sans login
 def achat_billet_view(request): #SEB : Plateforme d'achat des billets
@@ -105,7 +130,7 @@ def achat_billet_view(request): #SEB : Plateforme d'achat des billets
         # SEB : Initialise les variables et les montants
         montant_total = 0 #SEB : prix
         nombre_billet = 0 #SEB : pour la conversion des offres achetés en bon nombre de ticket individuels
-        panier = []
+        panier = [] #SEB : pour dev plus tard le mock
 
         # Parcourir les types de billets pour créer les billets en fonction des quantités choisies
         for billet in types_billet:
@@ -173,17 +198,18 @@ def annuler_reservation_view(request, token):
     reservation = get_object_or_404(Reservation, token = token, utilisateur=request.user)
 
     if request.method == 'POST':
-        # Récupérer le billet associé à la réservation
+        # le billet associé à la réservation
         billet = reservation.billet
         
-        # Récupérer l'événement associé à la réservation
+        # l'événement associé à la réservation
         evenement = reservation.evenement
         
 
         # Supprimer la réservation
         reservation.delete()
 
-        # Recréditer le billet
+
+        # Recréditer le billet à l'utilisateur de la reservation
         billet.utilisateur = request.user
         billet.est_valide = True
         billet.save()
@@ -215,19 +241,10 @@ def ticket_view(request, token):
     security_key_user = reservation.utilisateur.profile.security_key
     security_key_billet = reservation.billet.security_key_billet
 
-    # Généreration du QR code (concaténation du user security key et du security key du billet)
-    qr_data = f"{security_key_user}-{security_key_billet}"
-    qr_img = qrcode.make(qr_data)
-
-    # Enregistrer l'image QR code dans un fichier ou utiliser une réponse HttpResponse SEB : avoir créé le dossier scr/media/tickets
-    qr_img_relative_path = f'tickets/ticket_{reservation.token}.png'
-    qr_img_full_path = os.path.join(settings.MEDIA_ROOT, qr_img_relative_path)
-    qr_img.save(qr_img_full_path)
-    
+ 
 
     context = {
         'reservation': reservation,
-        'qr_img_path': os.path.join(settings.MEDIA_URL, qr_img_relative_path),
     }
 
     return render(request, 'ticket.html', context)

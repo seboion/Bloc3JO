@@ -1,10 +1,11 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views #SEB : pour utiliser les login et logout de Django
 from . import views #SEB : import de toutes les views
-from .views import CustomLoginView, annuler_reservation_view, ticket_view
+from .views import CustomLoginView, annuler_reservation_view, ticket_view, password_change_done_view
 #SEB : pour utiliser les fichiers media :
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import CustomPasswordChangeView
 
 urlpatterns = [ #SEB : liaisons de chaques vues aux urls
     path('login/', CustomLoginView.as_view(), name='login'), #SEB : login et logout de Django
@@ -22,5 +23,7 @@ urlpatterns = [ #SEB : liaisons de chaques vues aux urls
     path('confirmation-achat/', views.confirmation_achat_view, name='confirmation_achat'),
     path('annuler_reservation/<uuid:token>/', annuler_reservation_view, name='annuler_reservation'),
     path('ticket/<uuid:token>/', ticket_view, name='ticket_view'),
+    path('password_change_done/', password_change_done_view, name='password_change_done'),
+    path('password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #SEB : pour la gestion des images
 

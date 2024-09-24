@@ -34,17 +34,17 @@ class Evenement(models.Model):
     nom = models.CharField(max_length=100)
     date = models.DateTimeField()
     stock_initial = models.IntegerField()
-    stock_restant = models.IntegerField(blank=True, null=True)
+    stock_restant = models.IntegerField(blank=True, null=True) #SEB : se remplira tout seul si laissé nul lors de la saisie
     description = models.TextField()
     photo = models.ImageField(upload_to='evenements/', blank=True, null=True)
     a_la_une = models.BooleanField(default=False)
-    date_limite_reservation = models.DateTimeField(blank=True, null=True)
+    date_limite_reservation = models.DateTimeField(blank=True, null=True) #SEB : se remplira tout seul si laissé nul lors de la saisie
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs): #pour l'autocomplétion des valeurs qui peuvent au choix être laissées vides ou non 
         if self.stock_restant is None:  # Vérifie si stock_restant est nul
             self.stock_restant = self.stock_initial  # Initialise avec stock_initial
         if self.date_limite_reservation is None:
-            self.date_limite_reservation = self.date - timedelta(days=1)
+            self.date_limite_reservation = self.date - timedelta(days=1) #pour définir la date limite à J-1
         super().save(*args, **kwargs)  # Appele la méthode save de la classe parente
 
     def __str__(self):

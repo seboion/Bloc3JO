@@ -115,7 +115,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False #SEB : réglé sur False (par défaut sur True) pour désactiver la gestion des fuseaux horraires et des problèmes qui peuvent être liés (pas d'utilité dans ce projet)
 
 
 # Static files (CSS, JavaScript, Images)
@@ -135,3 +135,12 @@ LOGOUT_REDIRECT_URL = '/'
 #SEB : pour utiliser les fichiers multimedia (jpg pour cette app)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#SEB : gestion des sessions à fermer :
+SESSION_COOKIE_AGE = 300 #durée max 5min (300 secondes)
+SESSION_SAVE_EVERY_REQUEST = False # EEmpeche le prolongement de la session à chaque requête mineure
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True # Session expire lorsque l'utilisateur ferme son navigateur
+
+#SEB : Important à définir car changement par rapport aux valuurs par defaut de Django qui utilise le dossier templates/registration/
+LOGIN_URL = 'login' 
+

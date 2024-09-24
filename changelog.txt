@@ -53,7 +53,12 @@ V7 : Ajout du MDC au Projet
      Concatenation du QR code comme attendu par le client
      Ajout d'une image de test pour faciliter la création des évènements fictifs
 
-
+V10 : Après des tests de deploiements : renvoi de la génération coté client en javascript : plus simple et plus de gestion des png générés
+      Amélioration de la collecte des données utilisateurs : numéro de telephone sans lettre, nom prénom sans numéro... sur les pages inscriptions et profils
+      Ajout de la possibilité de changer le mot de passe dans la section profil
+      Modification de l'url par defaut du login pour eviter les erreur de redirection
+      Autodéconnexion au bout de 5 min d'inactivité
+      Modification du gitignore : ajout de lignes pour python
 
 A faire : 
                Résumé de la commande avant achat 

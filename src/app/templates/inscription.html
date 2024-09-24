@@ -9,7 +9,90 @@
     <h1>Créer un compte</h1>
     <form method="post" action="{% url 'inscription' %}">
         {% csrf_token %}
-        {{ form.as_p }} <!--SEB : permet d'afficher le formulaire DJango de base qui a été étendu grâce au fichier ajouté "forms.py dans l'app" -->
+        
+
+        {% if form.non_field_errors %}
+        <p class="error">{{ form.non_field_errors }}</p>  <!-- Erreurs générales -->
+    {% endif %}
+    
+    <div>
+        <label for="id_username">Nom d'utilisateur :</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <p class="error">{{ form.username.errors }}</p>
+        {% endif %}
+        <li>150 caractères maximum. Uniquement des lettres, nombres et les caractères « @ », « . », « + », « - » et « _ ».</li>
+    </div>
+    <br>
+
+    <div>
+        <label for="id_first_name">Prénom :</label>
+        {{ form.first_name }}
+        {% if form.first_name.errors %}
+            <p class="error">{{ form.first_name.errors }}</p>
+        {% endif %}
+    </div>
+    <br>
+
+    <div>
+        <label for="id_last_name">Nom :</label>
+        {{ form.last_name }}
+        {% if form.last_name.errors %}
+            <p class="error">{{ form.last_name.errors }}</p>
+        {% endif %}
+    </div>
+    <br>
+
+    <div>
+        <label for="id_email">Email :</label>
+        {{ form.email }}
+        {% if form.email.errors %}
+            <p class="error">{{ form.email.errors }}</p>
+        {% endif %}
+    </div>
+    <br>
+    
+    <div>
+        <label for="id_password1">Mot de passe :</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+            <p class="error">{{ form.password1.errors }}</p>
+        {% endif %}
+        <li>Votre mot de passe ne peut pas trop ressembler à vos autres informations personnelles.<br>
+            Votre mot de passe doit contenir au minimum 8 caractères.<br>
+            Votre mot de passe ne peut pas être un mot de passe couramment utilisé.<br>
+            Votre mot de passe ne peut pas être entièrement numérique.</li>
+    </div>
+    <br>
+
+    <div>
+        <label for="id_password2">Confirmation du mot de passe :</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+            <p class="error">{{ form.password2.errors }}</p>
+        {% endif %}
+        <li>Saisissez le même mot de passe que précédemment, pour vérification.</li>
+    </div>
+    <br>
+    
+    <div>
+        <label for="id_adresse">Adresse :</label>
+        {{ form.adresse }}
+        {% if form.adresse.errors %}
+            <p class="error">{{ form.adresse.errors }}</p>
+        {% endif %}
+    </div>
+    <br>
+
+    <div>
+        <label for="id_telephone">Numéro de téléphone :</label>
+        {{ form.telephone }}
+        {% if form.telephone.errors %}
+            <p class="error">{{ form.telephone.errors }}</p>
+        {% endif %}
+    </div>
+    <br>
+
         
         <button type="submit">S'inscrire</button>
     </form>

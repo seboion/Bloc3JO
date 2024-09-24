@@ -43,4 +43,8 @@ Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de reservat
 
 8.  La reservation et l'annulation des évènements n'est rendu possible que jusqu'à J-2 de la date de l'évènement concernée
 
+9. La génération des QR-Code se faisant coté client (javascript), si le jour de l'évènement le terminal client ne peut pas le générer, il est toujours possible d'acceder au numéro du ticket qui est également affiché.
+
+10. Les sessions utilisateurs se ferment automatiquement passé 5 minutes sans requetes
+
 

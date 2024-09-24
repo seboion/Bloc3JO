@@ -18,7 +18,7 @@
             <strong>{{ billet.nom }}</strong> - {{ billet.description }} - Prix: {{ billet.prix }}€
             
             {% if user.is_authenticated %}
-            <a href="{% url 'achat_billet' %}">Acheter</a>
+            <a href="{% url 'achat_billet' %}">Acheter vos billets sur la plateforme officielle !</a>
             {% endif %}
             
         </li>

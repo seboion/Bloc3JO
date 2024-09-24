@@ -1,4 +1,3 @@
-<!-- profil.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,20 +7,40 @@
 </head>
 <body>
     <h1>Votre compte ({{ utilisateur.username }})</h1>
+    
+<!-- SEB: Affiche ici les messages eventuels defini dans les vues (exemple mauvais mot de passe saisi...) -->    
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
 
-    <form method="post">
-        {% csrf_token %} <!--SEB: pour sécuriser la transmission des données-->
-        <fieldset>
-            <legend>Informations personnelles</legend>
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
-        </fieldset>
-        <button type="submit">Mettre à jour</button>
-    </form>
+<!-- SEB: Section de gestion du profil -->
+<form method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Gestion de votre profil</legend>
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+    </fieldset>
+    <button type="submit" name="update_info">Mettre à jour mes informations</button> <!--SEB : submit un "update_info" pour le différencier du submit du changment de mot de passe -->
+</form>
 
+<!-- SEB: Section de gestion du mot de passe -->   
+<form method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Gestion de votre mot de passe</legend>
+        {{ password_change_form.as_p }}
+    </fieldset>
+    <button type="submit" name="change_password">Modifier mon mot de passe</button>
+</form>
+
+<!--SEB: Section d'affichage des billets dispo-->
     <h2>Billets disponibles</h2>
     <p>Vous avez {{ quantite_totale_billets }} billets disponibles.</p>
 
+<!--SEB: Section d'affichage et de gestion des reservations-->
     <h2>Mes Réservations</h2>
     <ul>
     {% for reservation in reservations %}
@@ -45,11 +64,10 @@
     {% endfor %}
     </ul>
     
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+
+
+
+
 
     <form method="post" action="{% url 'logout' %}"> 
         {% csrf_token %}

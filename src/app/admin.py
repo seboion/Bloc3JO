@@ -3,7 +3,7 @@ from .models import TypeBillet, Evenement, Billet, Reservation #SEB : import des
 
 # Register your models here.
 
-#SEB : ajout des models à gérer
+#SEB : ajout des models à gérer dans la bdd
 admin.site.register(TypeBillet)
 admin.site.register(Evenement)
 admin.site.register(Billet)
