@@ -6,6 +6,7 @@ from .views import CustomLoginView, annuler_reservation_view, ticket_view, passw
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import CustomPasswordChangeView
+from .views import achat_billet_view, recap_achat_view, mock_paiement_view, confirmation_achat_view
 
 urlpatterns = [ #SEB : liaisons de chaques vues aux urls
     path('login/', CustomLoginView.as_view(), name='login'), #SEB : login et logout de Django
@@ -20,7 +21,9 @@ urlpatterns = [ #SEB : liaisons de chaques vues aux urls
     path('confirmation/', views.confirmation_reservation_view, name='confirmation_reservation'),
     path('profil/', views.profil_view, name='profil'),
     path('achat_billet/', views.achat_billet_view, name='achat_billet'),
-    path('confirmation-achat/', views.confirmation_achat_view, name='confirmation_achat'),
+    path('recap_achat/', views.recap_achat_view, name='recap_achat'),
+    path('mock_paiement/<str:token_url>/', views.mock_paiement_view, name='mock_paiement'),
+    path('confirmation_achat/', views.confirmation_achat_view, name='confirmation_achat'),
     path('annuler_reservation/<uuid:token>/', annuler_reservation_view, name='annuler_reservation'),
     path('ticket/<uuid:token>/', ticket_view, name='ticket_view'),
     path('password_change_done/', password_change_done_view, name='password_change_done'),

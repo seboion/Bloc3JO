@@ -138,7 +138,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #SEB : gestion des sessions à fermer :
 SESSION_COOKIE_AGE = 300 #durée max 5min (300 secondes)
-SESSION_SAVE_EVERY_REQUEST = False # EEmpeche le prolongement de la session à chaque requête mineure
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Utilise la session par base de données
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True # Session expire lorsque l'utilisateur ferme son navigateur
 
 #SEB : Important à définir car changement par rapport aux valuurs par defaut de Django qui utilise le dossier templates/registration/

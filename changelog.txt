@@ -60,9 +60,16 @@ V10 : Après des tests de deploiements : renvoi de la génération coté client 
       Autodéconnexion au bout de 5 min d'inactivité
       Modification du gitignore : ajout de lignes pour python
 
+
+
+V11 : Création de la page récapitulatif avant de procéder au paiement
+      Réalisation du mock simple pour "confirmer" le paiement
+      masquage de l'url du mock
+      ajout des @login_required sur les views où cela était necessaire
+
 A faire : 
-               Résumé de la commande avant achat 
-               le mock achat
+               faire la page de vérification des qrcode pour l'admin
+               changer le contenu des pages html phrase et navigation plus explicite
                faire les tests unitaires
                le front end
-
+               

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Récapitulatif de votre achat</title>
+</head>
+<body>
+    <h1>Récapitulatif de votre achat</h1>
+    
+    {% if panier %}
+        <ul>
+            {% for item in panier %}
+            <li>Offre "{{ item.billet_nom }}" - Quantité : {{ item.quantity }} - Prix : {{ item.billet_total }}€</li>
+            {% endfor %}
+        </ul>
+        <p>Montant total de votre commande : {{ montant_total }}€</p>
+        <p>Nombre total de billets : {{ total_billets }}</p>
+        <form method="post" action="{% url 'mock_paiement' token_url=token_url %}">
+            {% csrf_token %}
+            <input type="hidden" name="token_paiement" value="{{ token_paiement }}">
+            <button type="submit">Procéder au paiement</button>
+        </form>
+    {% else %}
+        <p>Aucun billet sélectionné.</p>
+        <a href="{% url 'achat_billet' %}">Retour à l'achat</a>
+    {% endif %}
+    
+    <a href="{% url 'home' %}">Retour à l'accueil</a>
+</body>
+</html>

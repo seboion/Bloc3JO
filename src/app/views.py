@@ -120,47 +120,144 @@ def profil_view(request): #SEB : page d'affichage du profil de l'utilisateur
 def password_change_done_view(request):
     return render(request, 'password_change_done.html')
 
-@login_required #SEB : pour que la page ne soit pas accessible sans login
-def achat_billet_view(request): #SEB : Plateforme d'achat des billets
+@login_required
+def achat_billet_view(request):
     types_billet = TypeBillet.objects.all()
-    utilisateur = request.user
 
     if request.method == 'POST':
+        montant_total = 0
+        nombre_billet = 0
+        panier = []
 
-        # SEB : Initialise les variables et les montants
-        montant_total = 0 #SEB : prix
-        nombre_billet = 0 #SEB : pour la conversion des offres achetés en bon nombre de ticket individuels
-        panier = [] #SEB : pour dev plus tard le mock
-
-        # Parcourir les types de billets pour créer les billets en fonction des quantités choisies
+        # SEB : Parcourir les types de billets pour stocker les billets sélectionnés
         for billet in types_billet:
             quantity = int(request.POST.get(f'quantities[{billet.id}]', 0))
-            montant_total += billet.prix * quantity
-            nombre_billet += billet.quantité_billet * quantity
+            if quantity > 0:
+                billet_total = float(billet.prix) * quantity #conversion en float car django utilise par defaut des decimal (non serialisable en JSON)
+                montant_total += billet_total
+                nombre_billet += billet.quantité_billet * quantity
+                panier.append({
+                    'type_billet_id': billet.id,
+                    'billet_nom': billet.nom,
+                    'billet_prix': float(billet.prix), 
+                    'quantity': quantity,
+                    'billet_total': billet_total,
+                })
 
-            for _ in range(quantity):
-                for _ in range(billet.quantité_billet):
-                    Billet.objects.create(
-                        utilisateur=utilisateur,
-                        type_billet=billet,
-                        est_valide=True,
-                        security_key_billet=uuid.uuid4()  # Génère une clé unique pour chaque billet
-                )
-        
-        # Si aucun billet n'a été sélectionné, renvoyer un message d'erreur
+        # Si aucun billet n'a été sélectionné
         if montant_total == 0:
             messages.error(request, "Veuillez sélectionner au moins un billet.")
             return redirect('achat_billet')
 
-# SEB : Rediriger vers une page de confirmation avec le montant total
+        # Stocker les détails de l'achat dans la session (pour le récapitulatif et le paiement)
+        request.session['panier'] = panier
+        request.session['montant_total'] = float(montant_total)
+        request.session['nombre_billet'] = nombre_billet
 
-        return redirect('confirmation_achat')
+        return redirect('recap_achat')
 
     # Récupère tous les types de billets disponibles pour les afficher
     return render(request, 'achat_billet.html', {'types_billet': types_billet})
 
-def confirmation_achat_view(request): #SEB : confirmation après achat
-    return render(request, 'confirmation_achat.html')
+@login_required
+def recap_achat_view(request):
+    # Récupérer les informations du panier depuis la session
+    panier = request.session.get('panier', [])
+    montant_total = request.session.get('montant_total', 0)
+    nombre_billet = request.session.get('nombre_billet', 0)
+
+    # Généreration d'un token unique pour la transaction
+    token_paiement = str(uuid.uuid4())
+    request.session['token_paiement'] = token_paiement
+
+    # Générer un token spécifique pour masquer l'URL
+    token_url = uuid.uuid4().hex #la conversion .hex permet de supprimer les tirets pour ne pas les avoir dans l'url
+    request.session['token_url'] = token_url
+
+    # Si le panier est vide, rediriger vers la page d'achat
+    if not panier:
+        messages.error(request, "Votre panier est vide. Veuillez sélectionner des billets.")
+        return redirect('achat_billet')
+    
+    # Calculer le nombre total de billets individuels
+    total_billets = 0
+    for item in panier:
+        # Récupérer l'objet TypeBillet correspondant
+        type_billet = TypeBillet.objects.get(id=item['type_billet_id'])
+        total_billets += item['quantity'] * type_billet.quantité_billet
+    
+    return render(request, 'recap_achat.html', {
+        'panier': panier,
+        'montant_total': montant_total,
+        'nombre_billet': nombre_billet,
+        'total_billets': total_billets,
+        'token_paiement': token_paiement,
+        'token_url': token_url,
+    })
+
+@login_required
+def mock_paiement_view(request, token_url):
+    token_url_session = request.session.get('token_url') #recup le token_url de la session
+    if token_url_session and token_url != token_url_session:
+        return HttpResponseForbidden("Accès refusé. URL invalide ou expirée.")
+
+    montant_total = request.session.get('montant_total', 0)
+    token_paiement = request.session.get('token_paiement')
+
+    # Si le montant total est zéro, rediriger vers l'achat
+    if montant_total == 0:
+        messages.error(request, "Le montant est nul. Veuillez sélectionner des billets.")
+        return redirect('achat_billet')
+
+    return render(request, 'mock_paiement.html', {
+        'montant_total': montant_total,
+        'token_paiement': token_paiement  # Passe le token au template
+
+    
+    })
+
+@login_required
+def confirmation_achat_view(request): #page de confirmation après achat via mock_paiement, génère les billets
+    token_paiement = request.POST.get('token_paiement')
+    token_session = request.session.get('token_paiement')
+
+    # Vérifie que le token correspond à celui stocké dans la session
+    if token_paiement != request.session.get('token_paiement'):
+        messages.error(request, "Paiement non valide.")
+        return redirect('achat_billet')
+
+    # Si le token est valide, procéder à la création des billets :
+
+    panier = request.session.get('panier', [])
+    montant_total = request.session.get('montant_total', 0)
+
+    # Génération des billets selon la quantité acheté
+    utilisateur = request.user
+
+    if panier:
+        for item in panier:
+            type_billet = TypeBillet.objects.get(id=item['type_billet_id'])
+
+            quantity = item['quantity']  # Quantité d'offres achetées
+            for _ in range(quantity):
+                # Création des billets individuels pour chaque billet dans l'offre
+                for _ in range(type_billet.quantité_billet):
+                    Billet.objects.create(
+                        utilisateur=utilisateur,
+                        type_billet=type_billet,
+                        est_valide=True,
+                        security_key_billet=uuid.uuid4()  # Génère une clé unique pour chaque billet
+                    )
+
+    # Réinitialiser le panier après le paiement ainsi que le token
+    request.session.pop('panier', None)
+    request.session.pop('montant_total', None)
+    request.session.pop('nombre_billet', None)
+    request.session.pop('token_paiement', None)
+
+    return render(request, 'confirmation_achat.html', {
+        'montant_total': montant_total,
+    })
 
 @login_required
 def reserver_evenement_view(request, evenement_id): #SEB : vérifie si l'utilisateur dispose bien d'un billet avant de reserver
@@ -190,9 +287,11 @@ def reserver_evenement_view(request, evenement_id): #SEB : vérifie si l'utilisa
     else:
         return render(request, 'plus_de_stock.html')
 
+@login_required
 def confirmation_reservation_view(request): #Page de confirmation après utilisation d'un billet pour une reservaiton
     return render(request, 'confirmation_reservation.html')
 
+@login_required
 def annuler_reservation_view(request, token):
 
     reservation = get_object_or_404(Reservation, token = token, utilisateur=request.user)
@@ -231,6 +330,7 @@ def reservations_view(request):
     reservations = Reservation.objects.filter(utilisateur=request.user)  #SEB : Réservations de l'utilisateur connecté
     return render(request, 'reservations.html', {'reservations': reservations})
 
+@login_required
 def ticket_view(request, token):
     reservation = get_object_or_404(Reservation, token=token)
 
@@ -248,3 +348,5 @@ def ticket_view(request, token):
     }
 
     return render(request, 'ticket.html', context)
+
+

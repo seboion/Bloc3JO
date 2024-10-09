@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement</title>
+</head>
+<body>
+    <h1>Paiement</h1>
+    <p>Montant à payer : {{ montant_total }}€</p>
+    <form method="post" action="{% url 'confirmation_achat' %}">
+        {% csrf_token %}
+        <input type="hidden" name="token_paiement" value="{{ token_paiement }}">
+        <button type="submit">Confirmer le paiement</button>
+    </form>
+</body>
+</html>
