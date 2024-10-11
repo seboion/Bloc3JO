@@ -28,5 +28,6 @@ urlpatterns = [ #SEB : liaisons de chaques vues aux urls
     path('ticket/<uuid:token>/', ticket_view, name='ticket_view'),
     path('password_change_done/', password_change_done_view, name='password_change_done'),
     path('password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
+    path('verification_billet/', views.verification_billet_view, name='verification_billet'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #SEB : pour la gestion des images
 

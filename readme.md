@@ -4,27 +4,28 @@ Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de reservat
     pip install -r requirements.txt
 
 2.  Le projet necessite la mise à disposition d'une base de donnée PostgreSQL (PostgreSQL doit donc être installé au préalable sur le système)
-    Pour le projet, une base de donnée nommée "jobdd" a été créée avec comme user "joadmin" et mot de passe "12369**/"
+    Les données devront être stockées dans le fichiers .env situé à la racine du projet sous ce format :
+    DB_NAME=##nom de votre base de donnée##
+    DB_USER=##utilisateur de votre base de donnée##
+    DB_PASSWORD=##mot de passe choisi##
+    DB_HOST=##adresse , localhost si projet utilisé en local##
+    DB_PORT=## port utilisé, 5432 par défaut si utilisé en local##
+
+
     Les commandes pour la création de la base de donnée :
     
     sudo -i -u postgres                             # Pour avoir acceder à PostgreSQL en tant que super utilisateur
     psql                                            # Accès à l'interface PostgreSQL 
-    CREATE USER joadmin WITH PASSWORD "12369**/";   # Création de l'utilisateur (suivant l'exemple précédemment cité, à modifier donc)
-    CREATE DATABASE jobdd OWNER jodamin;            # Création de la base de donnée
+    CREATE USER joadmin WITH PASSWORD "********";   # Création de l'utilisateur (suivant l'exemple précédemment cité)
+    CREATE DATABASE jobdd OWNER "*user";            # Création de la base de donnée
     \q                                              # Quitter l'interface
     exit                                            # Revenir à l'utilisateur normal
 
-    Les informations relatifs à la base de données sont situées dans le fichier settings.py du projet Django dans la variable (dict) DATABASE
-    Modifier ces valeurs en fonction du nouveau nom d'utilisateur et mot de passe choisi
+    Les informations relatifs à la base de données sont reprise dans le fichier settings.py du projet Django dans la variable (dict) DATABASE
 
 3.  Création du compte administrateur du site (permettant de visualiser et modifier les types de billets mise en vente et les évènements) :
     Avec les commandes suivantes (dans le dossier source du projet)
     python manage.py createsuperuser
-
-    Pour l'exemple du projet les informations suivantes peuvent être utilisées : 
-    user : joadmin
-    mail : joadmin@joadmin.com
-    password : 12369++-
 
 4.  Réaliser les migrations avec les commandes suivantes (toujours dans le dossier source du projet) : 
     python manage.py makemigrations
@@ -47,4 +48,21 @@ Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de reservat
 
 10. Les sessions utilisateurs se ferment automatiquement passé 5 minutes sans requetes
 
+11. Il est possible de vérifier la valité d'un ticket (=une reservation) via la saisie manuelle (ou d'un lecteur de QR code qui renverra cette même saisie) à l'adresse suivante : \verification_billet . Seul un compte administrateur pourra acceder à cette page. Si un utilisateur lambda connecté ou non tente d'acceder à cette page, il sera rediriger vers la page de connexion.
+
+12. Un compte administrateur ne doit pas être utilisé pour acceder aux fonctionnalités client : il ne peut acceder qu'à \admin et \verification_billet
+
+13. La page \admin rend visible le stock restant des évènements en cliquant sur Evenements puis le nom de l'évènement.
+
+14. Sur la page \admin, il est possible de supprimer des billets achetés par les utilisateurs, des réservations effectuées par les utilisateurs ; des évènements (qui supprimeront alors les reservations concernées et réalisées par les utilisateurs ainsi que leur billets achetés liés) et les Type de billets (=offres) qui aura également pour effet de supprimer les billets achetés par les utilisateurs sous ces offres. Une attention toute particulière est donc indispensable lors de la suppression d'éléments ayant déjà été utilisés par les utilisateurs. Des remboursements devront être réalisés dans le cas de tels suppression. L'administration de Django alerte sur les consequences de ces suppressions, et il est possible de les évaluer au cas par cas afin de permettre l'éventuel remboursement des utilisateurs. Ces suppressions manuelles n'entraine pas de remboursement automatique ni de remise à disposition des billets achetés. Les remboursements devront donc se faire manuellement selon les informations fournies grâce au message d'avertissement de l'administration Django fourni après demande de suppression et avant confirmation de la suppression définitive.
+
+15. Si un utilisateur demande la suppression de son compte, elle est également rendue possible depuis \admin dans la section utilisateurs. Il perdra alors ses billets ainsi que ses reservations.
+
+16. La réinitialisation du mot de passe n'est pas encore rendu autonome pour les utilisateurs. En cas de demande, il est possible de réinitialiser le mot de passe en leur communiquant un mot de passe temporaire qu'ils devront impérativement changer depuis leur page de profil.
+
+17. Par mesure de sécurité, il n'est pas possible de communiquer le mot de passe oublié à un utilisateur.
+
+18. Tests de l'application : Pour lancer les tests, depuis le dossier source du projet, exécuter la commande suivante : 
+    python manage.py test
+    Cette commande va chercher à executer tous les tests définis dans les classes TestCase du projet
 

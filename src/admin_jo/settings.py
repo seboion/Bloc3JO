@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+#SEB : import des variables d'environnement pour ne pas afficher de mot de passe en clair dans le code
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -78,11 +81,11 @@ WSGI_APPLICATION = 'admin_jo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', #SEB: modification des paramètres par defaut pour l'utilisation de postgresql (les nom d'utilisateur, password et nom de la bdd ont été créés au préalable et également avoir installé dans l'env psycopg)
-        'NAME': 'jobdd',
-        'USER': 'joadmin',
-        'PASSWORD': '12369**/',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 

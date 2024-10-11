@@ -62,13 +62,19 @@ V10 : Après des tests de deploiements : renvoi de la génération coté client 
 
 
 
-V11 : Création de la page récapitulatif avant de procéder au paiement
+V12 : Création de la page récapitulatif avant de procéder au paiement
       Réalisation du mock simple pour "confirmer" le paiement
       masquage de l'url du mock
       ajout des @login_required sur les views où cela était necessaire
 
+
+V13 : Page de vérification des tickets via qrcode ou saisie manuelle
+      Complétion du reademe.md
+      Utilisation de variables d'environnements pour ne pas avoir d'information sur la base de données dans le code
+      Poursuite des tests
+
 A faire : 
-               faire la page de vérification des qrcode pour l'admin
+
                changer le contenu des pages html phrase et navigation plus explicite
                faire les tests unitaires
                le front end

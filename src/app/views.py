@@ -19,6 +19,8 @@ from django.contrib.auth import update_session_auth_hash #pour ne pas déconnect
 #SEB : pour la personnalisation de la vue de changement de mot de passe :
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import user_passes_test #pour la page de vérification des tickets, permet d'utiliser le décorateur django
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 # Create your views here.
 
@@ -349,4 +351,55 @@ def ticket_view(request, token):
 
     return render(request, 'ticket.html', context)
 
+@user_passes_test(lambda u: u.is_superuser)  # SEB: Restriction à l'administrateur
+def verification_billet_view(request):
+    if request.method == 'POST':
+        numero_ticket = request.POST.get('numero_ticket')
+        if numero_ticket:  # Vérifie si numero_ticket n'est pas vide
+            try:
+                # Séparer la clé utilisateur et la clé billet à partir du séparateur "g" mis dans le template html (si besoin de le changer ne pas l'oublier dans le template)
+                security_key_user, security_key_billet = numero_ticket.split('g')
+                
+                # Valide que chaque partie est un UUID valide
+                uuid.UUID(security_key_user)
+                uuid.UUID(security_key_billet)
+                
+                # Recherche le profil utilisateur par security_key :
+                profile = Profile.objects.get(security_key=security_key_user)
+                
+                # Recherche le billet par security_key_billet :
+                billet = Billet.objects.get(security_key_billet=security_key_billet, utilisateur=profile.user)
 
+                # Recherche la reservation par l'utilisateur :
+                reservation =  Reservation.objects.get(utilisateur=profile.user)
+
+                # Chercher les info de l'evenement pour précision :
+                evenement = Evenement.objects.get(nom=reservation.evenement)
+
+                # Formatage des dates pour affichage des messages : 
+                formatted_date_achat = billet.date_achat.strftime('%d/%m/%Y à %H:%M')
+                formatted_date_evenement = evenement.date.strftime('%d/%m/%Y à %H:%M')
+                
+                # Si billet trouvé, afficher les messages serveur :
+                message = (
+                    f"Ticket valide ! <br>Ce ticket a été généré lors de la reservation effectué le {formatted_date_achat} avec un billet acheté avec une offre \" {billet.type_billet.nom} \" par l'utilisateur suivant (Nom, Prénom) : {profile.user.first_name}, {profile.user.last_name}. <br>" # la balise ne fonctionne que si |safe est ajouté dans le template
+                    
+                    f"<br>Il est affilié à la reservation de l'évenement \" {reservation.evenement} \" qui à lieu le {formatted_date_evenement}."
+                )
+                return render(request, 'verification_billet.html', {'message': message})
+            
+            except (Profile.DoesNotExist, Billet.DoesNotExist):
+                message = "Ticket invalide. Veuillez vérifier le numéro."
+            except (ValueError, ValidationError):
+                message = "Numéro de ticket incorrect ou non valide."
+            except (ObjectDoesNotExist): # Pour palier au problème de présentation d'un ticket qui a été annulé
+                message = "Le ticket n'est plus valide. La reservation a été réalisée puis annulée"
+        
+        else:
+            message = "Veuillez entrer un numéro de ticket."
+
+
+        
+        return render(request, 'verification_billet.html', {'message': message})
+    
+    return render(request, 'verification_billet.html')

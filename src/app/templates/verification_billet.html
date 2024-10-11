@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification des billets</title>
+</head>
+<body>
+    <h1>Vérification de billet</h1>
+    
+    
+    <form method="POST">
+        {% csrf_token %}
+        <label for="numero_ticket">Numéro de ticket :</label>
+        <input type="text" name="numero_ticket" id="numero_ticket" required>
+        <button type="submit">Vérifier</button>
+    </form>
+    
+    {% if message %}
+        <p>{{ message|safe }}</p> <!-- |safe indique à Django ici d'accepter les balises html (utilisé pour les retour à la ligne)-->
+    {% endif %}
+
+    {% if ticket_info %}
+        <h2>Informations du billet :</h2>
+        <p>Offre : {{ ticket_info.nom_offre }}</p>
+        <p>Date d'achat : {{ ticket_info.date_achat }}</p>
+        <p>Nom de l'utilisateur : {{ ticket_info.nom_utilisateur }} {{ ticket_info.prenom_utilisateur }}</p>
+        <p>Validité : {{ ticket_info.est_valide }}</p>
+    {% endif %}
+</body>
+</html>

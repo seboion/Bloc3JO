@@ -10,7 +10,7 @@
     
     <p>Évènement : {{ reservation.evenement.nom }}</p>
     <p>Date : {{ reservation.evenement.date }}</p>
-    <p>N° du Ticket : {{reservation.utilisateur.profile.security_key}}-{{reservation.billet.security_key_billet}}</p>
+    <p>N° du Ticket : {{reservation.utilisateur.profile.security_key}}g{{reservation.billet.security_key_billet}}</p> <!--le g permet de scinder les deux clé pour la vérif utlérieure-->
 
     <h2>QR Code à présenter aux bornes</h2>
 
@@ -25,7 +25,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> 
 <script>
     // Contenu du QR code
-    var qrContent = "{{ reservation.utilisateur.profile.security_key }}-{{ reservation.billet.security_key_billet }}";
+    var qrContent = "{{ reservation.utilisateur.profile.security_key }}g{{ reservation.billet.security_key_billet }}";
 
     // Généreration du QR code
     var qrcode = new QRCode(document.getElementById("qrcode"), {
