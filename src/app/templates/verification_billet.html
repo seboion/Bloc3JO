@@ -1,31 +1,38 @@
+<!-- CSS externalisé sous vérif.css pour cette page-->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vérification des billets</title>
+    {% load static %} <!-- indique de charger les static du projet django (cf réglage et commentaires dans settings.py)-->
+    <link rel="stylesheet" href="{% static 'css/verif.css' %}">
 </head>
 <body>
+    <div class="container">
     <h1>Vérification de billet</h1>
     
     
-    <form method="POST">
+    <form method="POST" class="form-check">
         {% csrf_token %}
         <label for="numero_ticket">Numéro de ticket :</label>
         <input type="text" name="numero_ticket" id="numero_ticket" required>
-        <button type="submit">Vérifier</button>
+        <button type="submit" class="btn-check">Vérifier</button>
     </form>
     
     {% if message %}
-        <p>{{ message|safe }}</p> <!-- |safe indique à Django ici d'accepter les balises html (utilisé pour les retour à la ligne)-->
+        <p class="message">{{ message|safe }}</p> <!-- |safe indique à Django ici d'accepter les balises html (utilisé pour les retour à la ligne)-->
     {% endif %}
 
     {% if ticket_info %}
+    <div class="ticket-info">
         <h2>Informations du billet :</h2>
         <p>Offre : {{ ticket_info.nom_offre }}</p>
         <p>Date d'achat : {{ ticket_info.date_achat }}</p>
         <p>Nom de l'utilisateur : {{ ticket_info.nom_utilisateur }} {{ ticket_info.prenom_utilisateur }}</p>
         <p>Validité : {{ ticket_info.est_valide }}</p>
+    </div>
     {% endif %}
+</div>
 </body>
 </html>

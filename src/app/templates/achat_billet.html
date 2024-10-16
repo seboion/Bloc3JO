@@ -1,64 +1,130 @@
+<!--CSS et JS externalisé-->
+<!-- début de la partie "fixe" du site-->
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Achat de billets pour les Jeux Olympiques de Paris</title>
-
-    <script>
-        // SEB : MAJ du total à payer
-        function updateTotal() {
-            let total = 0;
-            document.querySelectorAll('.quantity').forEach(function(input) {
-                const price = parseFloat(input.dataset.price);
-                const quantity = parseInt(input.value) || 0;
-                total += price * quantity;
-            });
-            document.getElementById('totalPrice').innerText = total.toFixed(2) + ' €';
-        }
-
-        // SEB : ajuste la quantité en utilisant les boutons + et -
-        function adjustQuantity(id, delta) {
-            const input = document.getElementById('quantity-' + id);
-            let newValue = (parseInt(input.value) || 0) + delta;
-            if (newValue < 0) newValue = 0;
-            input.value = newValue;
-            updateTotal();
-        }
-    </script>
+    <title>Projet Bloc 3 - Paris 2024 - Plateforme d'achat</title>
+    {% load static %} <!-- indique de charger les static du projet django (cf réglage et commentaires dans settings.py)-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
-    <h1>Bienvenue sur la plateforme d'achat de billets pour les Jeux Olympiques de Paris 2024</h1>
-    <p>Chaque billet vous permettra de réserver une place à l'un des événements de votre choix (sous réserve de disponibilité).</p>
-    <p>Ces billets sont non remboursables et non échangeables. Lors de l'accès à l'événement, en cas de contrôle des réservations, votre identité pourra être vérifiée. Si vous achetez des billets pour d'autres personnes, la présentation de votre pièce d'identité pourra être demandée. Pensez-y !</p>
 
-    <form method="post" action="{% url 'achat_billet' %}">
-        {% csrf_token %}
-
-        {% for billet in types_billet %}
-        <div>
-            <label for="quantity-{{ billet.id }}">{{ billet.nom }} - {{ billet.prix }}€</label>
-            <button type="button" onclick="adjustQuantity({{ billet.id }}, -1)">-</button>
-            <input type="number" name="quantities[{{ billet.id }}]" id="quantity-{{ billet.id }}" class="quantity" data-price="{{ billet.prix }}" value="0" min="0" onchange="updateTotal()">
-            <button type="button" onclick="adjustQuantity({{ billet.id }}, 1)">+</button>
+    <!-- Section logo et titre -->
+    <div class="logo-title">
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo Jo de Paris">
+            </a>
         </div>
-        {% endfor %}
+        <div class="title-section">
 
-        <div>
-            Total à payer : <span id="totalPrice">0.00 €</span>
+
+            <h1>Plateforme d'achat des Jeux Olympiques de Paris 2024</h1>
+
+
         </div>
-        <br><br>
+    </div>
 
-        <!-- Printera ici les messages retourné par le serveur sur la page web-->
-        {% if messages %}
-        {% for message in messages %}
-            <div>{{ message }}</div>
-        {% endfor %}
-        {% endif %}
-        
-        <button type="submit">Acheter</button>
-    </form>
+    <div class="wrapper">
+        <header>
+            <div class="mobile-menu" onclick="toggleMenu()">&#9776;</div>
 
-    <a href="{% url 'home' %}">Retour à l'accueil</a>
+            <!-- Barre de navigation supérieure -->
+            <nav>
+                <!-- Liens de gauche -->
+                <div class="nav-left">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Accueil</a></li>
+                        <li><a href="{% url 'billets' %}">Billets</a></li>
+                        <li><a href="{% url 'evenements' %}">Evénements</a></li>
+                    </ul>
+                </div>
+
+                <!-- Liens de droite -->
+                <div class="nav-right">
+                    <ul>
+                        {% if user.is_authenticated %}
+                        <!-- Visible que pour les utilisateurs connectés -->
+                        <li><a href="{% url 'profil' %}">Mon compte</a></li>
+
+                        <!-- Se déconnecter -->
+                        <li>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-button">Se déconnecter</button>
+                            </form>
+                        </li>
+
+                        {% else %}
+                        <!-- Visible pour les visiteurs non connectés -->
+                        <li><a href="{% url 'inscription' %}">Créer un compte</a></li>
+
+                        <li>
+                            <form method="post" action="{% url 'login' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="login-button-nav">Se connecter</button>
+                            </form>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+<!-- fin de la partie "fixe" du site-->
+                <h2>Plateforme d'achat de billets pour les Jeux Olympiques de Paris 2024</h2>
+                <h3>Sélectionnez ici parmi les offres du moment, celle(s) que vous souhaitez acheter :</h3>
+                
+
+                <form method="post" action="{% url 'achat_billet' %}" style="max-width: 500px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
+                    {% csrf_token %}
+
+                    {% for billet in types_billet %}
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label style="flex-grow: 1;" for="quantity-{{ billet.id }}">{{ billet.nom }} ({{billet.quantité_billet}} billet(s)) - {{ billet.prix }}€ </label>
+                        <button style="padding: 2px 10px;" type="button" onclick="adjustQuantity({{ billet.id }}, -1)">-</button>
+                        <input style="width: 80px; text-align: center; margin: 0 10px;" type="number" name="quantities[{{ billet.id }}]" id="quantity-{{ billet.id }}" class="quantity" data-price="{{ billet.prix }}" value="0" min="0" onchange="updateTotal()">
+                        <button style="padding: 2px 8px;" type="button" onclick="adjustQuantity({{ billet.id }}, 1)">+</button>
+                    </div>
+                    {% endfor %}
+
+                    <div style="margin-top: 20px; font-weight: bold; text-align: right;">
+                        Total à payer : <span id="totalPrice">0.00 €</span>
+                    </div>
+                    <br>
+
+                    <!-- Printera ici les messages retourné par le serveur sur la page web-->
+                    {% if messages %}
+                    {% for message in messages %}
+                        <div>{{ message }}</div>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    <button type="submit" style="width: 100%; padding: 10px; background-color: #70b5ff; color: white; font-size: 16px; border: none; border-radius: 5px; cursor: pointer;">Acheter</button>
+                </form>
+
+                <p style="font-size: 12px; color: gray;">Chaque billet vous permettra de réserver une place à l'un des événements de votre choix (sous réserve de disponibilité).</p>
+                <p style="font-size: 12px; color: gray;">Ces billets sont non remboursables et non échangeables.</p>
+                <p style="font-size: 12px; color: gray;">Lors de l'accès à l'événement, en cas de contrôle des réservations, votre identité pourra être vérifiée.</p>
+                <p style="font-size: 12px; color: gray;">Si vous achetez des billets pour d'autres personnes, la présentation de votre pièce d'identité pourra être demandée. Pensez-y !</p>
+
+<!-- début de la 2e partie "fixe" du site-->
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Site non officiel des Jeux Olympiques de Paris 2024 - Examen de Bloc 3 Studi</p>
+        </footer>
+
+        <script src="{% static 'js/script.js' %}"></script>
+    </div>
 </body>
+
 </html>
+<!-- fin de la 2e partie "fixe" du site-->

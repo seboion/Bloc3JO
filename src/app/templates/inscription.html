@@ -1,64 +1,140 @@
+<!--CSS et JS externalisé-->
+<!-- début de la partie "fixe" du site-->
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscriptions sur le site des JO 2024</title>
+    <title>Projet Bloc 3 - Paris 2024</title>
+    {% load static %} <!-- indique de charger les static du projet django (cf réglage et commentaires dans settings.py)-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
-    <h1>Créer un compte</h1>
-    <form method="post" action="{% url 'inscription' %}">
+
+    <!-- Section logo et titre -->
+    <div class="logo-title">
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo Jo de Paris">
+            </a>
+        </div>
+        <div class="title-section">
+
+            {% if utilisateur %}
+            <h1>Bonjour {{ utilisateur.username }} ! Bienvenue sur le site des Jeux Olympiques de Paris 2024</h1>
+            {% else %}
+            <h1>Bienvenue sur le site des Jeux Olympiques de Paris 2024</h1>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <header>
+            <div class="mobile-menu" onclick="toggleMenu()">&#9776;</div>
+
+            <!-- Barre de navigation supérieure -->
+            <nav>
+                <!-- Liens de gauche -->
+                <div class="nav-left">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Accueil</a></li>
+                        <li><a href="{% url 'billets' %}">Billets</a></li>
+                        <li><a href="{% url 'evenements' %}">Evénements</a></li>
+                    </ul>
+                </div>
+
+                <!-- Liens de droite -->
+                <div class="nav-right">
+                    <ul>
+                        {% if user.is_authenticated %}
+                        <!-- Visible que pour les utilisateurs connectés -->
+                        <li><a href="{% url 'profil' %}">Mon compte</a></li>
+
+                        <!-- Se déconnecter -->
+                        <li>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-button">Se déconnecter</button>
+                            </form>
+                        </li>
+
+                        {% else %}
+                        <!-- Visible pour les visiteurs non connectés -->
+                        <li><a href="{% url 'inscription' %}">Créer un compte</a></li>
+
+                        <li>
+                            <form method="post" action="{% url 'login' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="login-button-nav">Se connecter</button>
+                            </form>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+<!-- fin de la partie "fixe" du site-->
+    
+<!-- CSS inline ici pour personnaliser uniquement le contenu de la partie création d'un nouvel user-->
+    <h2 style="text-align: center;">Créer un compte</h2>
+    <form method="post" action="{% url 'inscription' %}" style="max-width: 700px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
         {% csrf_token %}
         
 
         {% if form.non_field_errors %}
-        <p class="error">{{ form.non_field_errors }}</p>  <!-- Erreurs générales -->
+        <p class="error" style="color: red; text-align: center;">{{ form.non_field_errors }}</p>
     {% endif %}
     
-    <div>
-        <label for="id_username">Nom d'utilisateur :</label>
+    <div style="margin-bottom: 15px;">
+        <label for="id_username" style="display: block; font-weight: bold;">Nom d'utilisateur :</label>
         {{ form.username }}
         {% if form.username.errors %}
-            <p class="error">{{ form.username.errors }}</p>
+            <p class="error" style="color: red;">{{ form.username.errors }}</p>
         {% endif %}
-        <li>150 caractères maximum. Uniquement des lettres, nombres et les caractères « @ », « . », « + », « - » et « _ ».</li>
+        <li style="font-size: 12px; color: gray;">150 caractères maximum. Uniquement des lettres, nombres et les caractères « @ », « . », « + », « - » et « _ ».</li>
     </div>
     <br>
 
     <div>
-        <label for="id_first_name">Prénom :</label>
+        <label for="id_first_name" style="display: block; font-weight: bold;">Prénom :</label>
         {{ form.first_name }}
         {% if form.first_name.errors %}
-            <p class="error">{{ form.first_name.errors }}</p>
+            <p class="error" style="color: red;">{{ form.first_name.errors }}</p>
         {% endif %}
     </div>
     <br>
 
     <div>
-        <label for="id_last_name">Nom :</label>
+        <label for="id_last_name" style="display: block; font-weight: bold;">Nom :</label>
         {{ form.last_name }}
         {% if form.last_name.errors %}
-            <p class="error">{{ form.last_name.errors }}</p>
+            <p class="error" style="color: red;">{{ form.last_name.errors }}</p>
         {% endif %}
     </div>
     <br>
 
     <div>
-        <label for="id_email">Email :</label>
+        <label for="id_email" style="display: block; font-weight: bold;">Email :</label>
         {{ form.email }}
         {% if form.email.errors %}
-            <p class="error">{{ form.email.errors }}</p>
+            <p class="error" style="color: red;">{{ form.email.errors }}</p>
         {% endif %}
     </div>
     <br>
     
     <div>
-        <label for="id_password1">Mot de passe :</label>
+        <label for="id_password1" style="display: block; font-weight: bold;">Mot de passe :</label>
         {{ form.password1 }}
         {% if form.password1.errors %}
-            <p class="error">{{ form.password1.errors }}</p>
+            <p class="error" style="color: red;">{{ form.password1.errors }}</p>
         {% endif %}
-        <li>Votre mot de passe ne peut pas trop ressembler à vos autres informations personnelles.<br>
+        <li style="font-size: 12px; color: gray;">Votre mot de passe ne peut pas trop ressembler à vos autres informations personnelles.<br>
             Votre mot de passe doit contenir au minimum 8 caractères.<br>
             Votre mot de passe ne peut pas être un mot de passe couramment utilisé.<br>
             Votre mot de passe ne peut pas être entièrement numérique.</li>
@@ -66,29 +142,29 @@
     <br>
 
     <div>
-        <label for="id_password2">Confirmation du mot de passe :</label>
+        <label for="id_password2" style="display: block; font-weight: bold;">Confirmation du mot de passe :</label>
         {{ form.password2 }}
         {% if form.password2.errors %}
-            <p class="error">{{ form.password2.errors }}</p>
+            <p class="error" style="color: red;">{{ form.password2.errors }}</p>
         {% endif %}
-        <li>Saisissez le même mot de passe que précédemment, pour vérification.</li>
+        <li style="font-size: 12px; color: gray;">Saisissez le même mot de passe que précédemment, pour vérification.</li>
     </div>
     <br>
     
     <div>
-        <label for="id_adresse">Adresse :</label>
+        <label for="id_adresse" style="display: block; font-weight: bold;">Adresse :</label>
         {{ form.adresse }}
         {% if form.adresse.errors %}
-            <p class="error">{{ form.adresse.errors }}</p>
+            <p class="error" style="color: red;">{{ form.adresse.errors }}</p>
         {% endif %}
     </div>
     <br>
 
     <div>
-        <label for="id_telephone">Numéro de téléphone :</label>
+        <label for="id_telephone" style="display: block; font-weight: bold;">Numéro de téléphone :</label>
         {{ form.telephone }}
         {% if form.telephone.errors %}
-            <p class="error">{{ form.telephone.errors }}</p>
+            <p class="error" style="color: red;">{{ form.telephone.errors }}</p>
         {% endif %}
     </div>
     <br>
@@ -96,7 +172,18 @@
         
         <button type="submit">S'inscrire</button>
     </form>
-    <a href="{% url 'home' %}">Retour à l'accueil</a>
-</body>
-</html>
 
+<!-- début de la 2e partie "fixe" du site-->
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Site non officiel des Jeux Olympiques de Paris 2024 - Examen de Bloc 3 Studi</p>
+        </footer>
+
+        <script src="{% static 'js/script.js' %}"></script>
+    </div>
+</body>
+
+</html>
+<!-- fin de la 2e partie "fixe" du site-->

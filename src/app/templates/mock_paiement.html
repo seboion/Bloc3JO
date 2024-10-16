@@ -1,17 +1,22 @@
+<!-- CSS externalisé sous mock.css pour cette page-->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paiement</title>
+    <title>Mock Paiement JO Paris 2024</title>
+    {% load static %} <!-- indique de charger les static du projet django (cf réglage et commentaires dans settings.py)-->
+    <link rel="stylesheet" href="{% static 'css/mock.css' %}">
 </head>
 <body>
-    <h1>Paiement</h1>
-    <p>Montant à payer : {{ montant_total }}€</p>
-    <form method="post" action="{% url 'confirmation_achat' %}">
-        {% csrf_token %}
-        <input type="hidden" name="token_paiement" value="{{ token_paiement }}">
-        <button type="submit">Confirmer le paiement</button>
-    </form>
+    <div class="container">
+        <h1>Site de paiement factis pour la plateforme d'achat des Jeux Olympiques de Paris 2024</h1>
+        <p class="montant">Montant à payer : {{ montant_total }}€</p>
+        <form method="post" action="{% url 'confirmation_achat' %}">
+            {% csrf_token %}
+            <input type="hidden" name="token_paiement" value="{{ token_paiement }}">
+            <button type="submit" class="btn-payer">Confirmer le paiement</button>
+        </form>
+</div>
 </body>
 </html>

@@ -1,13 +1,100 @@
+<!--CSS et JS externalisé-->
+<!-- début de la partie "fixe" du site-->
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation d'achat</title>
+    <title>Projet Bloc 3 - Paris 2024 - Plateforme d'achat</title>
+    {% load static %} <!-- indique de charger les static du projet django (cf réglage et commentaires dans settings.py)-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
+
+    <!-- Section logo et titre -->
+    <div class="logo-title">
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo Jo de Paris">
+            </a>
+        </div>
+        <div class="title-section">
+
+
+            <h1>Plateforme d'achat des Jeux Olympiques de Paris 2024</h1>
+
+
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <header>
+            <div class="mobile-menu" onclick="toggleMenu()">&#9776;</div>
+
+            <!-- Barre de navigation supérieure -->
+            <nav>
+                <!-- Liens de gauche -->
+                <div class="nav-left">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Accueil</a></li>
+                        <li><a href="{% url 'billets' %}">Billets</a></li>
+                        <li><a href="{% url 'evenements' %}">Evénements</a></li>
+                    </ul>
+                </div>
+
+                <!-- Liens de droite -->
+                <div class="nav-right">
+                    <ul>
+                        {% if user.is_authenticated %}
+                        <!-- Visible que pour les utilisateurs connectés -->
+                        <li><a href="{% url 'profil' %}">Mon compte</a></li>
+
+                        <!-- Se déconnecter -->
+                        <li>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-button">Se déconnecter</button>
+                            </form>
+                        </li>
+
+                        {% else %}
+                        <!-- Visible pour les visiteurs non connectés -->
+                        <li><a href="{% url 'inscription' %}">Créer un compte</a></li>
+
+                        <li>
+                            <form method="post" action="{% url 'login' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="login-button-nav">Se connecter</button>
+                            </form>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+<!-- fin de la partie "fixe" du site-->
+
     <h1>Confirmation d'achat</h1>
     <p>Votre paiement de {{ montant_total }}€ a été confirmé avec succès !</p>
-    <a href="{% url 'home' %}">Retour à l'accueil</a>
+    <p>Grâce à votre achat vous pourrez procéder à la réservation des évènements de votre choix.</p>
+    <p>Retrouvez tous vos billets et reservations dans la rubrique "Mon compte".</p>
+
+<!-- début de la 2e partie "fixe" du site-->
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Site non officiel des Jeux Olympiques de Paris 2024 - Examen de Bloc 3 Studi</p>
+        </footer>
+
+        <script src="{% static 'js/script.js' %}"></script>
+    </div>
 </body>
+
 </html>
+<!-- fin de la 2e partie "fixe" du site-->

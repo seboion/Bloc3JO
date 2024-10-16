@@ -46,7 +46,7 @@ Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de reservat
 
 9. La génération des QR-Code se faisant coté client (javascript), si le jour de l'évènement le terminal client ne peut pas le générer, il est toujours possible d'acceder au numéro du ticket qui est également affiché.
 
-10. Les sessions utilisateurs se ferment automatiquement passé 5 minutes sans requetes
+10. Les sessions utilisateurs se ferment automatiquement passé 15 minutes d'inactivité
 
 11. Il est possible de vérifier la valité d'un ticket (=une reservation) via la saisie manuelle (ou d'un lecteur de QR code qui renverra cette même saisie) à l'adresse suivante : \verification_billet . Seul un compte administrateur pourra acceder à cette page. Si un utilisateur lambda connecté ou non tente d'acceder à cette page, il sera rediriger vers la page de connexion.
 

@@ -1,49 +1,44 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evènements</title>
-</head>
-<body>
-    <h1>Tous les évènements des Jeux Olypiques de Paris 2024</h1>
-    {% if not user.is_authenticated %}
-    <p>Connectez-vous ou creez un compte pour reserver des places aux événements</p>
-    {% endif %}
-    <ul>
-        {% for evenement in evenements %}
-        <div>
-            <strong>{{ evenement.nom }}</strong> - {{ evenement.description }}<br>
-            
-            {% if evenement.photo %}
-            <img src="{{ evenement.photo.url }}" alt="{{ evenement.nom }}"><br>
-            {% endif %}
+<!--Template partiel injecté avec JS (pages de consultations simples)-->
+{% if not user.is_authenticated %}
+<p class="warning-info">Vous devez vous connecter pour reserver vos places aux évènements</p>
+{% endif %}    
+    
+    <h2>Retrouvez ici tous les évènements des Jeux Olypiques de Paris 2024</h2>
 
-            Date: {{ evenement.date }} - Places restantes: {{ evenement.stock_restant }}<br>
-
-            <!-- Vérifie si un user est identifié pour afficher ou non les liens de resa-->
-            {% if user.is_authenticated %}
-
+    <section>
+        <ul>
+            {% for evenement in evenements %}
+            <li>
+                <strong>{{ evenement.nom }}</strong> - {{ evenement.description }}<br>
                 
-                <!--Vérifie si la date de l'évènement n'est pas trop courte (se bloquera à un jour avant la date de reservation)-->
-                {% if not evenement.reservation_possible %}
-                    <p>Les réservations pour cet évènement sont désormais fermées.</p><br>
-                {% else %}
-                    <!--Vérifie si des places sont encore disponible et propose d'attendre un desistement si plus dispo-->
-                    {% if evenement.stock_restant > 0 %}
-                        <a href="{% url 'reserver_evenement' evenement.id %}">Réserver maintenant votre place !</a><br>
+                {% if evenement.photo %}
+                <img src="{{ evenement.photo.url }}" alt="{{ evenement.nom }}"><br>
+                {% endif %}
+
+                Date: {{ evenement.date }} - Places restantes: {{ evenement.stock_restant }}<br>
+
+                <!-- Vérifie si un user est identifié pour afficher ou non les liens de resa-->
+                {% if user.is_authenticated %}
+
+                    
+                    <!--Vérifie si la date de l'évènement n'est pas trop courte (se bloquera à un jour avant la date de reservation)-->
+                    {% if not evenement.reservation_possible %}
+                        <p>Les réservations pour cet évènement sont désormais fermées.</p><br>
                     {% else %}
-                        <p>Désolé, il n'y a plus de place disponible. Soyez attentif aux éventuels désistements !</p><br>
-                    {% endif %}
+                        <!--Vérifie si des places sont encore disponible et propose d'attendre un desistement si plus dispo-->
+                        {% if evenement.stock_restant > 0 %}
+                            <a href="{% url 'reserver_evenement' evenement.id %}">Réserver maintenant votre place !</a><br>
+                        {% else %}
+                            <p>Désolé, il n'y a plus de place disponible. Soyez attentif aux éventuels désistements !</p><br>
+                        {% endif %}
+                    
+                    {% endif %}    
                 
-                {% endif %}    
-             
 
-            {% endif %}
+                {% endif %}
 
-        </div><br>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'home' %}">Retour à l'accueil</a>
-</body>
-</html>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    

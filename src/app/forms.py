@@ -100,10 +100,10 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Ancien mot de passe'}),
     )
     new_password1 = forms.CharField(
-        label="Nouveau mot de passe",
+        label="Saisissez ensuite ici votre nouveau mot de passe",
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Nouveau mot de passe'}),
     )
     new_password2 = forms.CharField(
-        label="Confirmer le nouveau mot de passe",
+        label="Enfin, confirmer ici votre nouveau mot de passe",
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirmer le nouveau mot de passe'}),
     )

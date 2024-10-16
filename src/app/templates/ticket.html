@@ -1,13 +1,16 @@
+<!--CSS externalisé sous ticket.css pour cette page et javascipt dans le template (car seule la génération du qrcode est concerné)-->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votre Ticket</title>
+    {% load static %} <!-- indique de charger les static du projet django (cf réglage et commentaires dans settings.py)-->
+    <link rel="stylesheet" href="{% static 'css/ticket.css' %}">
 </head>
 <body>
     <h1>Tickets de réservation Jeux Olympiques de Paris 2024</h1>
-    
+    <div>
     <p>Évènement : {{ reservation.evenement.nom }}</p>
     <p>Date : {{ reservation.evenement.date }}</p>
     <p>N° du Ticket : {{reservation.utilisateur.profile.security_key}}g{{reservation.billet.security_key_billet}}</p> <!--le g permet de scinder les deux clé pour la vérif utlérieure-->
@@ -18,10 +21,14 @@
 
     <p>Merci pour votre réservation !</p>
     <p>Nous vous rappelons que ce ticket est personnel. Une présentation de l'identité de la personne ayant réalisé l'achat pourra vous être demandée.</p>
+    </div>
     <a href="{% url 'profil' %}">Retour à mon profil</a>
 
 
 <!-- QRCode.js pour générer le QR Code coté utilisateur -->
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> 
 <script>
     // Contenu du QR code

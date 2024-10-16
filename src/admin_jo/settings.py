@@ -24,12 +24,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(v4!mfv%t#rlgg)++@7ak22f5!#w_y)ez0!@+gqn4^%dgv*8th'
+#SEB : sortie du code et mis en .env
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+#SEB : lors du passage à DEBUG = False : modifier ALLOWED_HOSTS ; rassembler tous les fichiers static avec python manage.py collectstatic et avoir défini un dossier STATIC_ROOT
+
+DEBUG = True
+#DEBUG = False
+
+#SEB: Si DEBUG = False et pour mise en production, indiquer ici les adresses pour le local : localhost et 127.0.0.1
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+#SEB : pour que la commande python manage.py collectstatic copie les fichiers statics dans ce dossier
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 # Application definition
@@ -125,6 +135,7 @@ USE_TZ = False #SEB : réglé sur False (par défaut sur True) pour désactiver 
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'app/static')] #SEB : pour les fichiers static de l'app
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -140,7 +151,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #SEB : gestion des sessions à fermer :
-SESSION_COOKIE_AGE = 300 #durée max 5min (300 secondes)
+SESSION_COOKIE_AGE = 900 #durée max 15min (900 secondes)
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Utilise la session par base de données
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True # Session expire lorsque l'utilisateur ferme son navigateur
 

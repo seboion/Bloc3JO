@@ -73,9 +73,24 @@ V13 : Page de vérification des tickets via qrcode ou saisie manuelle
       Utilisation de variables d'environnements pour ne pas avoir d'information sur la base de données dans le code
       Poursuite des tests
 
+V14 : Réalisation du front end
+      Amélioration des explications fourni sur les page html
+      Amélioration du formattage du code
+      Essais de sortie du mode DEBUG
+      Externalisation de la SECRET_KEY de Django
+      MAJ de la doc technique en V2
+      
+
 A faire : 
 
-               changer le contenu des pages html phrase et navigation plus explicite
+
                faire les tests unitaires
-               le front end
+               correction d'un problème pour le système de vérification des tickets
+               améliorer la gestion des erreurs
+               faire du logging ?
+               voir pour les fichiers static en mode deploiement
+               MAJ le kanban
+               manuel utilisateur à améliorer
+
+
                

@@ -1,12 +1,87 @@
+<!--CSS et JS externalisé-->
+<!-- début de la partie "fixe" du site-->
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil</title>
+    <title>Projet Bloc 3 - Paris 2024</title>
+    {% load static %} <!-- indique de charger les static du projet django (cf réglage et commentaires dans settings.py)-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
-    <h1>Votre compte ({{ utilisateur.username }})</h1>
+
+    <!-- Section logo et titre -->
+    <div class="logo-title">
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="Logo Jo de Paris">
+            </a>
+        </div>
+        <div class="title-section">
+
+            {% if utilisateur %}
+            <h1>Bonjour {{ utilisateur.username }} ! Bienvenue sur le site des Jeux Olympiques de Paris 2024</h1>
+            {% else %}
+            <h1>Bienvenue sur le site des Jeux Olympiques de Paris 2024</h1>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <header>
+            <div class="mobile-menu" onclick="toggleMenu()">&#9776;</div>
+
+            <!-- Barre de navigation supérieure -->
+            <nav>
+                <!-- Liens de gauche -->
+                <div class="nav-left">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Accueil</a></li>
+                        <li><a href="{% url 'billets' %}">Billets</a></li>
+                        <li><a href="{% url 'evenements' %}">Evénements</a></li>
+                    </ul>
+                </div>
+
+                <!-- Liens de droite -->
+                <div class="nav-right">
+                    <ul>
+                        {% if user.is_authenticated %}
+                        <!-- Visible que pour les utilisateurs connectés -->
+                        <li><a href="{% url 'profil' %}">Mon compte</a></li>
+
+                        <!-- Se déconnecter -->
+                        <li>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-button">Se déconnecter</button>
+                            </form>
+                        </li>
+
+                        {% else %}
+                        <!-- Visible pour les visiteurs non connectés -->
+                        <li><a href="{% url 'inscription' %}">Créer un compte</a></li>
+
+                        <li>
+                            <form method="post" action="{% url 'login' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="login-button-nav">Se connecter</button>
+                            </form>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+<!-- fin de la partie "fixe" du site-->
+    
+    <h2>Votre compte ({{ utilisateur.username }})</h2>
     
 <!-- SEB: Affiche ici les messages eventuels defini dans les vues (exemple mauvais mot de passe saisi...) -->    
     {% if messages %}
@@ -16,7 +91,7 @@
     {% endif %}
 
 <!-- SEB: Section de gestion du profil -->
-<form method="post">
+<form method="post" class="info-profil">
     {% csrf_token %}
     <fieldset>
         <legend>Gestion de votre profil</legend>
@@ -27,7 +102,7 @@
 </form>
 
 <!-- SEB: Section de gestion du mot de passe -->   
-<form method="post">
+<form method="post" class="info-password">
     {% csrf_token %}
     <fieldset>
         <legend>Gestion de votre mot de passe</legend>
@@ -37,11 +112,11 @@
 </form>
 
 <!--SEB: Section d'affichage des billets dispo-->
-    <h2>Billets disponibles</h2>
+    <h2 class="billets-dispo">Billets disponibles</h2>
     <p>Vous avez {{ quantite_totale_billets }} billets disponibles.</p>
 
 <!--SEB: Section d'affichage et de gestion des reservations-->
-    <h2>Mes Réservations</h2>
+    <h2 class="Mes-reservations">Mes Réservations</h2>
     <ul>
     {% for reservation in reservations %}
         <li>
@@ -63,16 +138,18 @@
         <li>Aucune réservation trouvée.</li>
     {% endfor %}
     </ul>
-    
 
+<!-- début de la 2e partie "fixe" du site-->
+</section>
+</main>
 
+<footer>
+    <p>&copy; 2024 Site non officiel des Jeux Olympiques de Paris 2024 - Examen de Bloc 3 Studi</p>
+</footer>
 
-
-
-    <form method="post" action="{% url 'logout' %}"> 
-        {% csrf_token %}
-        <button type="submit">Se déconnecter</button>
-    </form>
-    <a href="{% url 'home' %}">Retour à l'accueil</a>
+<script src="{% static 'js/script.js' %}"></script>
+</div>
 </body>
+
 </html>
+<!-- fin de la 2e partie "fixe" du site-->

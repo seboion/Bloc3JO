@@ -148,7 +148,7 @@ def achat_billet_view(request):
 
         # Si aucun billet n'a été sélectionné
         if montant_total == 0:
-            messages.error(request, "Veuillez sélectionner au moins un billet.")
+            messages.error(request, "Veuillez sélectionner au moins une offre.")
             return redirect('achat_billet')
 
         # Stocker les détails de l'achat dans la session (pour le récapitulatif et le paiement)
@@ -163,7 +163,7 @@ def achat_billet_view(request):
 
 @login_required
 def recap_achat_view(request):
-    # Récupérer les informations du panier depuis la session
+    # Récupéreration des informations du panier depuis la session
     panier = request.session.get('panier', [])
     montant_total = request.session.get('montant_total', 0)
     nombre_billet = request.session.get('nombre_billet', 0)
@@ -172,7 +172,7 @@ def recap_achat_view(request):
     token_paiement = str(uuid.uuid4())
     request.session['token_paiement'] = token_paiement
 
-    # Générer un token spécifique pour masquer l'URL
+    # Généreration d'un token spécifique pour masquer l'URL
     token_url = uuid.uuid4().hex #la conversion .hex permet de supprimer les tirets pour ne pas les avoir dans l'url
     request.session['token_url'] = token_url
 
@@ -370,8 +370,8 @@ def verification_billet_view(request):
                 # Recherche le billet par security_key_billet :
                 billet = Billet.objects.get(security_key_billet=security_key_billet, utilisateur=profile.user)
 
-                # Recherche la reservation par l'utilisateur :
-                reservation =  Reservation.objects.get(utilisateur=profile.user)
+                # Recherche la reservation par l'utilisateur ET le billet:
+                reservation = Reservation.objects.get(utilisateur=profile.user, billet=billet)
 
                 # Chercher les info de l'evenement pour précision :
                 evenement = Evenement.objects.get(nom=reservation.evenement)
@@ -382,9 +382,9 @@ def verification_billet_view(request):
                 
                 # Si billet trouvé, afficher les messages serveur :
                 message = (
-                    f"Ticket valide ! <br>Ce ticket a été généré lors de la reservation effectué le {formatted_date_achat} avec un billet acheté avec une offre \" {billet.type_billet.nom} \" par l'utilisateur suivant (Nom, Prénom) : {profile.user.first_name}, {profile.user.last_name}. <br>" # la balise ne fonctionne que si |safe est ajouté dans le template
+                    f"Ticket valide ! <br><br> Ticket généré avec la reservation effectué le {formatted_date_achat}.<br><br> Le billet provient d'une offre \"{billet.type_billet.nom}\".<br><br> Acheté par (Nom, Prénom) : {profile.user.first_name}, {profile.user.last_name}. <br>" # la balise ne fonctionne que si |safe est ajouté dans le template
                     
-                    f"<br>Il est affilié à la reservation de l'évenement \" {reservation.evenement} \" qui à lieu le {formatted_date_evenement}."
+                    f"<br>Il est affilié à la reservation de l'évenement \"{reservation.evenement}\" qui à lieu le {formatted_date_evenement}."
                 )
                 return render(request, 'verification_billet.html', {'message': message})
             
