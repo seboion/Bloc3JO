@@ -24,19 +24,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SEB : sortie du code et mis en .env
+#SEB : sortie du code et mis en .env pour la re-generer : python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
 #SEB : lors du passage à DEBUG = False : modifier ALLOWED_HOSTS ; rassembler tous les fichiers static avec python manage.py collectstatic et avoir défini un dossier STATIC_ROOT
 
-DEBUG = True
+DEBUG = False
 #DEBUG = False
 
 #SEB: Si DEBUG = False et pour mise en production, indiquer ici les adresses pour le local : localhost et 127.0.0.1
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'sebastien.alavigne.eu']
+
+#SEB : utilisation de nginx il faut donc autoriser les requetes venant du nom de domaine public :
+CSRF_TRUSTED_ORIGINS = ['https://sebastien.alavigne.eu']
 
 #SEB : pour que la commande python manage.py collectstatic copie les fichiers statics dans ce dossier
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')

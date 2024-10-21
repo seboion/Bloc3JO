@@ -1,0 +1,187 @@
+/* Section logo et titre */
+.logo-title {
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: #edf2ff;
+
+}
+
+
+
+.logo {
+    display: flex;
+    align-items: center;
+
+}
+
+.logo img {
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.title-section h1 {
+    margin: 0;
+    font-size: 25px;
+
+}
+
+/* ajustement du Header */
+header {
+    padding: 4px 10px;
+    background-color: #edf2ff;
+    display: flex;
+    justify-content: space-between; /* pour séparer le logo et la nav */
+    align-items: center;
+    top: 0;
+    position: sticky;
+
+    
+}
+
+.wrapper {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    background-color: #edf2ff;
+    text-align: center;
+    padding: 0px;
+    bottom: 0;
+    width: 100%;
+}
+
+/* ajustement du body */
+body {
+    font-family: Garamond, sans-serif;
+    margin: 5;
+    padding: 0;
+}
+
+/* Style pour la navigation */
+nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+.nav-left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; 
+}
+
+.nav-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; 
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a, nav ul li button {
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    
+}
+
+
+/* Menu mobile (caché lors d'affichage sur ordinateur) */
+.mobile-menu {
+    display: none;
+}
+
+/* Pour la version mobile ou petits ecrans*/
+@media (max-width: 768px){
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        flex-direction: column;
+        display: none;
+        width: 100%;
+    }
+
+    
+    
+    .mobile-menu {
+        display: block;
+        cursor: pointer;
+        font-size: 24px;
+        margin-top: 10px;
+    }
+    
+    .mobile-menu.open + nav ul {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+/* Conteneur des événements, affichage en grille si ecran large, en colonne pour petits écrans */
+section ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 0;
+    list-style-type: none;
+
+    
+    
+
+}
+
+section ul li {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+section ul li img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    section ul {
+        grid-template-columns: 1fr;
+    }
+}
+
+.warning-info {
+    background-color: #ffd1d1;
+    padding: 10px;
+
+}
+
+.alert {
+    padding: 10px;
+    background-color: #ff657f;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+

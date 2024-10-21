@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+div {
+    display: block;
+    margin: 20px;
+    border: 2px solid #0056b3;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+
+
+h1 {
+    text-align: center;
+    color: #0056b3;
+    margin-bottom: 20px;
+}
+
+p {
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+h2 {
+    color: #333;
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* div du QR code */
+#qrcode {
+    display: block;
+    margin: 20px auto;
+    border: 2px solid #0056b3;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+/* pour le lien de retour au profil */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    padding: 10px;
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a:hover {
+    background-color: #003d80;
+}

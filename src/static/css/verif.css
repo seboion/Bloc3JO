@@ -1,0 +1,93 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 500px;
+    width: 100%;
+    text-align: left;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    color: #9e0000;
+    margin-bottom: 8px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #be0000;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #690000;
+}
+
+.message {
+    font-size: 20px;
+    color: #d9534f;
+    text-align: center;
+}
+
+.ticket-info {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.ticket-info p {
+    font-size: 16px;
+    color: #9e0000;
+    margin: 5px 0;
+}
+
+.ticket-info h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* Pour petits écrans */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    button {
+        font-size: 14px;
+    }
+}

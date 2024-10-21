@@ -26,13 +26,13 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
-        if not re.match(r"^[a-zA-Zéèêëàâôï\s - ']+$", first_name): #autorise aussi les - et ' en plus de toutes les lettres et les espaces (\s)
+        if not re.match(r"^[a-zA-Zéèêëàâôï\s\-'']+$", first_name): #autorise aussi les - et ' en plus de toutes les lettres et les espaces (\s)
             raise forms.ValidationError("Le prénom ne doit contenir que des lettres.")
         return first_name
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name')
-        if not re.match(r"^[a-zA-Zéèêëàâôï\s - ']+$", last_name):
+        if not re.match(r"^[a-zA-Zéèêëàâôï\s\-'']+$", last_name):
             raise forms.ValidationError("Le nom ne doit contenir que des lettres.")
         return last_name
 
@@ -59,13 +59,13 @@ class UpdateUserForm(forms.ModelForm):
     
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
-        if not re.match(r"^[a-zA-Zéèêëàâôï\s - ']+$", first_name): #autorise aussi les - et ' en plus de toutes les lettres
+        if not re.match(r"^[a-zA-Zéèêëàâôï\s\-'']+$", first_name): #autorise aussi les - et ' en plus de toutes les lettres
             raise forms.ValidationError("Le prénom ne doit contenir que des lettres.")
         return first_name
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name')
-        if not re.match(r"^[a-zA-Zéèêëàâôï\s - ']+$", last_name):
+        if not re.match(r"^[a-zA-Zéèêëàâôï\s\-'']+$", last_name):
             raise forms.ValidationError("Le nom ne doit contenir que des lettres.")
         return last_name
 
@@ -107,3 +107,5 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         label="Enfin, confirmer ici votre nouveau mot de passe",
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirmer le nouveau mot de passe'}),
     )
+
+

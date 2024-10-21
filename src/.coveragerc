@@ -1,0 +1,24 @@
+[run]
+# Exclure les répertoires de tests et de migrations
+omit =
+    */migrations/*
+    */tests/*
+    manage.py
+    app/admin.py
+    app/apps.py
+    app/test/*
+    app/tests.py
+    app/__init__.py
+
+[report]
+# Exclure certaines lignes de code, comme les blocs de `__init__` ou les gestionnaires d'exceptions
+exclude_lines =
+    # Ne pas tester la couverture des déclarations de fonctions et des classes vides
+    if __name__ == .__main__.:
+    def __repr__
+    def __str__
+    def __init__
+    raise NotImplementedError
+
+# Montrer les lignes non couvertes par les tests
+show_missing = True
