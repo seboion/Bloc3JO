@@ -79,18 +79,16 @@ V14 : Réalisation du front end
       Essais de sortie du mode DEBUG
       Externalisation de la SECRET_KEY de Django
       MAJ de la doc technique en V2
+
+V15 : Poursuite de la réalisation des tests
+      MAJ de la doc technique en V3 
+      Travail sur le déploiement
+      Génération de rapport détaillant le pourcentage de code couvert par le test avec coverage (MAJ du requirements.txt)
+      correction de petits bugs trouvés grâces aux tests
       
+V16 :
 
-A faire : 
 
-
-               faire les tests unitaires
-               correction d'un problème pour le système de vérification des tickets
-               améliorer la gestion des erreurs
-               faire du logging ?
-               voir pour les fichiers static en mode deploiement
-               MAJ le kanban
-               manuel utilisateur à améliorer
 
 
                

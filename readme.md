@@ -66,3 +66,6 @@ Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de reservat
     python manage.py test
     Cette commande va chercher à executer tous les tests définis dans les classes TestCase du projet
 
+19. Reset la secret_key Django : python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+
+
