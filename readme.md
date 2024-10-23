@@ -1,8 +1,9 @@
-# Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de réservation de tickets pour les évènements des JO 2024 :
+# Fonctionnement du projet "Bloc3" : Application de réservation de tickets pour les évènements des JO 2024
 
 ##    1. Utilisation du code source de l’application via le dépôt git :
 
-###        a. Restauration de toutes les dépendances du projet : Utiliser le fichier requirements.txt avec la commande
+###        a. Restauration de toutes les dépendances du projet :
+Utiliser le fichier requirements.txt avec la commande :
 ```bash 
 pip install -r requirements.txt
 ```
@@ -10,7 +11,7 @@ Pour toute mise à jour des dépendances, utiliser la commande suivante à la ra
 ```bash
 pip freeze -> requirements.txt
 ```
-###        b. Le projet nécessite la mise à disposition d'une base de données PostgreSQL (PostgreSQL doit donc être installé au préalable sur le système)
+###        b. Le projet nécessite la mise à disposition d'une base de données PostgreSQL(PostgreSQL doit donc être installé au préalable sur le système) :
 Les données devront être stockées dans le fichier .env situé à la racine du projet sous ce format :
 ```makefile
 DB_NAME=##nom de votre base de donnée##
@@ -45,12 +46,16 @@ Si nécessaire, les informations relatives à la base de données sont reprises 
 
 ###        c. Création du compte administrateur du site (permettant de visualiser et modifier les types de billets mise en vente et les évènements) :
 Avec les commandes suivantes (dans le dossier source du projet) :
+```bash
 python manage.py createsuperuser
+```
 
 ###        d. Renseigner la Secret_key Django dans le fichier .env :
 
 Si besoin de réinitialiser la Secret Key du projet taper la commande suivante : 
+```bash
 python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
 La renseigner ensuite dans le fichier .env sous ce format :
 ```makefile
 SECRET_KEY = ‘#secret_key#’
@@ -93,7 +98,7 @@ Seuls les évènements dont la date est supérieure ou égale à la date du jour
 
 Il n’est pas obligatoire de compléter le champs « Stock restant » qui se complètera par défaut par la même valeur que le stock initial.
 
-Il n’est pas utile non plus de compléter le champs « Date limite de réservation » qui se complètera par défaut à J-2
+Il n’est pas utile non plus de compléter le champs « Date limite de réservation » qui se complètera par défaut à J-2.
 
 ##    3. Utilisation de l’application via le navigateur internet, en local ou une fois déployée en tant qu’utilisateur :
 
@@ -167,7 +172,7 @@ Cette commande va chercher à exécuter tous les tests définis dans les classes
 
 ###        b. Export du rapport de couverture des tests :
 Il est possible d’exporter un rapport de couverture de test avec les commandes suivantes (depuis le dossier /src)  :
-Exécutions des tests :
+Exécution des tests :
 ```bash
 coverage run --source='.' manage.py test
 ```

@@ -69,7 +69,7 @@ V12 : Création de la page récapitulatif avant de procéder au paiement
 
 
 V13 : Page de vérification des tickets via qrcode ou saisie manuelle
-      Complétion du reademe.md
+      Complétion du readme.md
       Utilisation de variables d'environnements pour ne pas avoir d'information sur la base de données dans le code
       Poursuite des tests
 
@@ -91,7 +91,8 @@ V16 :
       Correction d'un problème de police
       MAJ complète du manuel utilisateur (readme.md)
 
-
+V16b et V16c :
+      Amélioration de la mise en page du fichier readme.md en exploitant le formattage Markdown
 
 
 
