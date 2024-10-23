@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 #SEB : lors du passage à DEBUG = False : modifier ALLOWED_HOSTS ; rassembler tous les fichiers static avec python manage.py collectstatic et avoir défini un dossier STATIC_ROOT
 
-DEBUG = False
+DEBUG = True
 #DEBUG = False
 
 #SEB: Si DEBUG = False et pour mise en production, indiquer ici les adresses pour le local : localhost et 127.0.0.1

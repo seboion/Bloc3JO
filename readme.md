@@ -1,71 +1,158 @@
-Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de reservation de tickets pour les évènements des JO 2024 :
+Fonctionnement du projet "Bloc3", exercice de réalisation d'un site de réservation de tickets pour les évènements des JO 2024 :
 
-1.  Restauration de toutes les dépendances du projets avec la commande 
-    pip install -r requirements.txt
+    1) Utilisation du code source de l’application via le dépôt git :
 
-2.  Le projet necessite la mise à disposition d'une base de donnée PostgreSQL (PostgreSQL doit donc être installé au préalable sur le système)
-    Les données devront être stockées dans le fichiers .env situé à la racine du projet sous ce format :
-    DB_NAME=##nom de votre base de donnée##
-    DB_USER=##utilisateur de votre base de donnée##
-    DB_PASSWORD=##mot de passe choisi##
-    DB_HOST=##adresse , localhost si projet utilisé en local##
-    DB_PORT=## port utilisé, 5432 par défaut si utilisé en local##
+        a) Restauration de toutes les dépendances du projet : Utiliser le fichier requirements.txt avec la commande
+pip install -r requirements.txt
+Pour toute mise à jour des dépendances, utiliser la commande suivante à la racine du projet :
+pip freeze -> requirements.txt
 
+        b) Le projet nécessite la mise à disposition d'une base de données PostgreSQL (PostgreSQL doit donc être installé au préalable sur le système)
+Les données devront être stockées dans le fichier .env situé à la racine du projet sous ce format :
+DB_NAME=##nom de votre base de donnée##
+DB_USER=##utilisateur de votre base de donnée##
+DB_PASSWORD=##mot de passe choisi##
+DB_HOST=##adresse , localhost si projet utilisé en local##
+DB_PORT=## port utilisé, 5432 par défaut si utilisé en local##
 
-    Les commandes pour la création de la base de donnée :
-    
-    sudo -i -u postgres                             # Pour avoir acceder à PostgreSQL en tant que super utilisateur
-    psql                                            # Accès à l'interface PostgreSQL 
-    CREATE USER joadmin WITH PASSWORD "********";   # Création de l'utilisateur (suivant l'exemple précédemment cité)
-    CREATE DATABASE jobdd OWNER "*user";            # Création de la base de donnée
-    \q                                              # Quitter l'interface
-    exit                                            # Revenir à l'utilisateur normal
+Commandes pour la création de la base de données (les données sont ici des exemples) :
 
-    Les informations relatifs à la base de données sont reprise dans le fichier settings.py du projet Django dans la variable (dict) DATABASE
+# Pour avoir accéder à PostgreSQL en tant que super utilisateur :
+sudo -i -u postgres 
 
-3.  Création du compte administrateur du site (permettant de visualiser et modifier les types de billets mise en vente et les évènements) :
-    Avec les commandes suivantes (dans le dossier source du projet)
-    python manage.py createsuperuser
+# Accès à l'interface PostgreSQL :
+psql
 
-4.  Réaliser les migrations avec les commandes suivantes (toujours dans le dossier source du projet) : 
-    python manage.py makemigrations
-    python manage.py migrate
+# Création de l'utilisateur « joamdin » :
+CREATE USER joadmin WITH PASSWORD "********"; 
 
-5.  Lancer le serveur pour acceder au projet via le navigateur internet :
-    python manage.py runserver
-    puis ouvrir le liens local ainsi générer (CTRL+C pour fermer le serveur local)
+# Création de la base de données « jobdd » :
+CREATE DATABASE jobdd OWNER "*user"; 
 
-5.  Une fois sur le site internet, se rendre sur /admin du site pour accéder à l'interface administrateur
+# Quitter l'interface exit # Revenir à l'utilisateur normal :
+\q 
 
-6.  Commencer par créer les types d'offres (Solo, Duo, Famille) et des évènements pour les réservations (un fichier testImageEvent.jpg peut être utilisé il est situé dans le dossier src/media/Tests)
+Si nécessaire, les informations relatives à la base de données sont reprises dans le fichier settings.py du projet Django (src/admin_jo/settings.py) dans la variable (dict) DATABASE (elles pointent vers le fichier .env)
 
-7.  Lors de la création d'évènements, cocher la case "A la une" pour que l'évènement fasse partie des évènements affichés sur la page d'accueil.
-    Seuls les évènements dont la date est supérieure ou égale à la date du jour ET dont la case "A la une" aura été coché s'afficheront sur la page d'accueil.
+        c) Création du compte administrateur du site (permettant de visualiser et modifier les types de billets mise en vente et les évènements) :
+Avec les commandes suivantes (dans le dossier source du projet) :
+python manage.py createsuperuser
 
-8.  La reservation et l'annulation des évènements n'est rendu possible que jusqu'à J-2 de la date de l'évènement concernée
+        d) Renseigner la Secret_key Django dans le fichier .env :
 
-9. La génération des QR-Code se faisant coté client (javascript), si le jour de l'évènement le terminal client ne peut pas le générer, il est toujours possible d'acceder au numéro du ticket qui est également affiché.
+Si besoin de réinitialiser la Secret Key du projet taper la commande suivante : 
+python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+La renseigner ensuite dans le fichier .env sous ce format :
+SECRET_KEY = ‘#secret_key#’
 
-10. Les sessions utilisateurs se ferment automatiquement passé 15 minutes d'inactivité
+Le projet ne contenant plus la clé, il est nécessaire de la réinitialiser avant utilisation.
+Pour la version déployée, la clé a été également réinitialisé.
 
-11. Il est possible de vérifier la valité d'un ticket (=une reservation) via la saisie manuelle (ou d'un lecteur de QR code qui renverra cette même saisie) à l'adresse suivante : \verification_billet . Seul un compte administrateur pourra acceder à cette page. Si un utilisateur lambda connecté ou non tente d'acceder à cette page, il sera rediriger vers la page de connexion.
+        e) En utilisation local, dans le fichiers settings.py, DEBUG peut être mis sur TRUE, la version déployée doit elle impérativement être réglée sur FALSE.
 
-12. Un compte administrateur ne doit pas être utilisé pour acceder aux fonctionnalités client : il ne peut acceder qu'à \admin et \verification_billet
+        f) Réaliser les migrations avec les commandes suivantes (toujours dans le dossier source du projet) :
+python manage.py makemigrations
+python manage.py migrate
 
-13. La page \admin rend visible le stock restant des évènements en cliquant sur Evenements puis le nom de l'évènement.
+Cela permet d’initialiser la base de données pour le projet Django
 
-14. Sur la page \admin, il est possible de supprimer des billets achetés par les utilisateurs, des réservations effectuées par les utilisateurs ; des évènements (qui supprimeront alors les reservations concernées et réalisées par les utilisateurs ainsi que leur billets achetés liés) et les Type de billets (=offres) qui aura également pour effet de supprimer les billets achetés par les utilisateurs sous ces offres. Une attention toute particulière est donc indispensable lors de la suppression d'éléments ayant déjà été utilisés par les utilisateurs. Des remboursements devront être réalisés dans le cas de tels suppression. L'administration de Django alerte sur les consequences de ces suppressions, et il est possible de les évaluer au cas par cas afin de permettre l'éventuel remboursement des utilisateurs. Ces suppressions manuelles n'entraine pas de remboursement automatique ni de remise à disposition des billets achetés. Les remboursements devront donc se faire manuellement selon les informations fournies grâce au message d'avertissement de l'administration Django fourni après demande de suppression et avant confirmation de la suppression définitive.
+        g) Lancer le serveur local Django pour accéder au projet via le navigateur internet :
+python manage.py runserver
+Puis ouvrir le lien local fourni dans le terminal suite à cette commande 
+(CTRL+C pour fermer le serveur local)
 
-15. Si un utilisateur demande la suppression de son compte, elle est également rendue possible depuis \admin dans la section utilisateurs. Il perdra alors ses billets ainsi que ses reservations.
+Cette étape ne peut être réalisée que si les précédentes ont été préalablement réalisées.
 
-16. La réinitialisation du mot de passe n'est pas encore rendu autonome pour les utilisateurs. En cas de demande, il est possible de réinitialiser le mot de passe en leur communiquant un mot de passe temporaire qu'ils devront impérativement changer depuis leur page de profil.
+    2) Utilisation de l’application via le navigateur internet, en local ou une fois déployée (l’ordre des étapes suivantes est important pour l’utilisation normale de l’application) :
 
-17. Par mesure de sécurité, il n'est pas possible de communiquer le mot de passe oublié à un utilisateur.
+        a) Accès à l’administration du site :
+Une fois sur le site internet, se rendre sur /admin du site pour accéder à l'interface administrateur. Utiliser les identifiants fournis pour la version déployée, ou les identifiants créés en partie 1) c) pour la version locale.
 
-18. Tests de l'application : Pour lancer les tests, depuis le dossier source du projet, exécuter la commande suivante : 
-    python manage.py test
-    Cette commande va chercher à executer tous les tests définis dans les classes TestCase du projet
+        b) Création d’offre de billet (indispensable pour l’achat de billet pour l’utilisateur) :
+Depuis l’interface administrateur : commencer par créer les types d'offres (Solo, Duo, Famille) en cliquant sur la section Type billet.
+Donnez un nom, une description de l’offre, un prix ainsi que la quantité de billet correspondant à l’offre. Chaque billet ainsi émis après achat permettra à l’utilisateur d’effectuer une réservation.
 
-19. Reset la secret_key Django : python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+        c) Création d’évènements des JO (indispensable pour la réalisation de réservation) :
+Depuis l’interface administrateur et la section Evenement créer un nouvel évènement en saisissant son nom, une date et une heure, un stock initial et une description.
+Un fichier « testImageEvent.jpg » peut être utilisé pour la photo, il est situé dans le dossier src/media/Tests. 
+Lors de la création d'évènements, cocher la case "A la une" pour que l'évènement fasse partie des évènements affichés sur la page d'accueil.
+Seuls les évènements dont la date est supérieure ou égale à la date du jour ET dont la case "A la une" aura été coché s'afficheront sur la page d'accueil.
+
+Il n’est pas obligatoire de compléter le champs « Stock restant » qui se complètera par défaut par la même valeur que le stock initial.
+
+Il n’est pas utile non plus de compléter le champs « Date limite de réservation » qui se complètera par défaut à J-2
+
+    3) Utilisation de l’application via le navigateur internet, en local ou une fois déployée en tant qu’utilisateur :
+
+Une fois les offres et les évènements créés, il est possible d’utiliser l’application en tant que visiteur ou utilisateur lambda. 
+Se déconnecter du compte administrateur afin de pouvoir créer un compte utilisateur depuis la page d’accueil du site.
+
+        a) Créer un utilisateur et simuler l’achat d’un billet pour pouvoir effectuer une réservation afin de consulter l’évolution de la base de données en tant qu’administrateur.
+
+    4) Gestion administrateur (en se reconnectant depuis le compte administrateur) :
+
+        a) Contrôle de la validité d’un ticket (via QR code) :
+Il est possible de vérifier la validé d'un ticket (=une réservation fait par un utilisateur avec un billet acheté) via la saisie manuelle (ou d'un lecteur de QR code qui renverra cette même saisie) à l'adresse suivante :
+\verification_billet
+
+Si un utilisateur lambda connecté ou non tente d'accéder à cette page, il sera redirigé vers la page de connexion. Cette page n’est accessible que pour les administrateurs, en vue de contrôler la validité d’un ticket le jour J. Les informations relatives à l’utilisateur, à l’achat et à la réservation concernée par le ticket s’afficheront ici.
+
+        b) Consultation des stocks restant :
+La page \admin rend visible le stock restant des évènements en cliquant sur Evenements puis sur le nom de l'évènement.
+
+        c) Suppression d’un compte utilisateur : 
+Si un utilisateur demande la suppression de son compte, elle est également rendue possible depuis \admin dans la section utilisateurs.
+Il perdra alors ses billets ainsi que ses réservations.
+
+        d) Accès aux données utilisateurs :
+L’administrateur peux accéder aux données utilisateurs si besoin en cliquant sur le champ utilisateurs. Seul le mot de passe restera masqué.
+
+        e) Réinitialisation d’un mot de passe perdu :
+La réinitialisation du mot de passe n'est pas encore rendue autonome pour les utilisateurs.
+En cas de demande, il est possible de réinitialiser le mot de passe en leur communiquant un mot de passe temporaire qu'ils devront impérativement changer depuis leur page de profil.
+
+Par mesure de sécurité, il n'est pas possible de communiquer le mot de passe oublié à un utilisateur (ce dernier n’est pas visible même par un administrateur).
+
+    5) Remarques générales sur l’utilisation de l’application :
+
+        a) La réservation et l'annulation des évènements n'est rendu possible que jusqu'à J-2 de la date de l'évènement concernée par défaut.
+
+        b) La génération des QR-Code se faisant coté client (javascript), si le jour de l'évènement, le terminal client ne peut pas le générer (javascript désactivé par exemple sur le terminal), il est toujours possible d'accéder au numéro du ticket qui est également affiché en clair.
+
+        c) Les sessions utilisateurs se ferment automatiquement passé 15 minutes d'inactivité.
+
+        d) Un compte administrateur ne doit pas être utilisé pour accéder aux fonctionnalités client : il ne doit accéder qu'à \admin et \verification_billet
+
+        e) Sur la page \admin, il est possible de supprimer :
+
+Des billets achetés par les utilisateurs ;
+Des réservations effectuées par les utilisateurs ;
+Des évènements créés (qui supprimeront alors les réservations concernées et réalisées par les utilisateurs ainsi que leur billets achetés liés) ;
+Et des Type de billets (=offres) qui aura également pour effet de supprimer les billets achetés par les utilisateurs sous ces offres.
+
+Une attention toute particulière est donc indispensable lors de la suppression d'éléments ayant déjà été utilisés par les utilisateurs.
+
+Des remboursements devront être réalisés dans le cas de telles suppression.
+L'administration de Django alerte sur les conséquences de ces suppressions, et il est possible de les évaluer au cas par cas afin de permettre l'éventuel remboursement des utilisateurs.
+
+Ces suppressions manuelles n’entrainent pas de remboursement automatique ni de remise à disposition des billets achetés.
+Les remboursements devront donc se faire manuellement selon les informations fournies grâce au message d'avertissement de l'administration Django fourni après demande de suppression et avant confirmation de la suppression définitive.
+
+    6) Informations complémentaires concernant l’utilisation du code source depuis le dépôt :
+
+        a) Réalisation des tests :
+Pour lancer les tests, depuis le dossier source du projet, exécuter la commande suivante :
+python manage.py test
+Cette commande va chercher à exécuter tous les tests définis dans les classes TestCase du projet
+
+        b) Export du rapport de couverture des tests :
+Il est possible d’exporter un rapport de couverture de test avec les commandes suivantes (depuis le dossier /src)  :
+Exécutions des tests :
+coverage run --source='.' manage.py test
+	Affichage du rapport dans le terminal :
+	coverage report
+	Génération du rapport html : 
+	coverage html
+Le fichier .coveragerc permet d’exclure du comptage les parties du code qui n’ont pas lieu d’être testées (tous le code pré-fourni par Django par exemple)
 
 

@@ -87,7 +87,9 @@ V15 : Poursuite de la réalisation des tests
       correction de petits bugs trouvés grâces aux tests
       
 V16 :
-
+      Documentation technique V4
+      Correction d'un problème de police
+      MAJ complète du manuel utilisateur (readme.md)
 
 
 
